@@ -6,7 +6,7 @@ const router = express.Router();
 
 const isAPIAuthenticated = require('../middleware/isAPIAuthenticated');
 
-const phonePostController = require('../controllers/auth/register/post');
+const phonePostController = require('../controllers/auth/phone/post');
 const codePostController = require('../controllers/auth/code/post');
 
 router.post(
