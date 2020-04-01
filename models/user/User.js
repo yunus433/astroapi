@@ -51,8 +51,7 @@ const UserSchema = new Schema({
     default: ""
   },
   best_match_combination: {
-    type: String,
-    required: true
+    type: String
   },
   mid_match_combinations: {
     type: Array,
