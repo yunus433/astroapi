@@ -23,7 +23,6 @@ const mongoUri = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/sellingpl
 
 // require local route controllers
 const authRouteController = require('./routes/authRoute');
-const horoscopeRouteController = require('./routes/horoscopeRoute');
 
 // connect mongoose to server
 mongoose.connect(mongoUri, { useNewUrlParser: true, auto_reconnect: true, useUnifiedTopology: true, useCreateIndex: true });
@@ -40,7 +39,6 @@ app.use((req, res, next) => {
 
 // add route controllers
 app.use('/auth', authRouteController);
-app.use('/horoscope', horoscopeRouteController);
 
 // listen for socket.io connection
 io.on('connection', (socket) => {
