@@ -12,7 +12,10 @@ module.exports = (req, res) => {
   User.findById(mongoose.Types.ObjectId(req.body.id), (err, user) => {
     if (err || !user) return res.status(500).json({ error: "user not found" });
 
-    if (user.phone_auth_code == req.body.code && user.created_at - req_time <= five_min) {
+    if (user.phone_auth_code == req.body.code) {
+      if (user.last_active - req_time > five_min)
+        return res.status(400).json({ error: "time limit exceeded" });
+
       User.findByIdAndUpdate(mongoose.Types.ObjectId(req.body.id), {$set: {
         phone_auth_code: null,
         verified: true
@@ -22,10 +25,7 @@ module.exports = (req, res) => {
         return res.status(200).json({ user });
       });
     } else {
-      return res.status(400).json({
-        error: "wrong auth code",
-        user_id: user._id
-      });
+      return res.status(400).json({ error: "wrong auth code" });
     }
   })
 }
