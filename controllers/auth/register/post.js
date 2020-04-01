@@ -18,7 +18,7 @@ module.exports = (req, res) => {
   newUser.save((err, user) => {
     if (err && err.code == 11000)
       return res.status(400).json({ error: "phone number already in use" });
-    
+
     if (err || !user) return res.status(500).json({ error: "mongodb error" });
 
     sendSMS({
