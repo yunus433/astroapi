@@ -17,8 +17,7 @@ module.exports = (req, res) => {
         return res.status(400).json({ error: "time limit exceeded" });
 
       User.findByIdAndUpdate(mongoose.Types.ObjectId(req.body.id), {$set: {
-        phone_auth_code: null,
-        verified: true
+        phone_auth_code: null
       }}, {new: true}, (err, user) => {
         if (err) return res.status(500).json({ error: "unknown error" });
 

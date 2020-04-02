@@ -23,11 +23,23 @@ const UserSchema = new Schema({
   },
   name: {
     type: String,
-    default: null
+    default: ""
   },
-  verified: {
-    type: Boolean,
-    default: false
+  gender: {
+    type: String,
+    default: ""
+  },
+  wanted_gender: {
+    type: String,
+    default: ""
+  },
+  birth_time: {
+    type: Object,
+    default: {}
+  },
+  birth_location: {
+    type: Object,
+    default: {}
   },
   completed: {
     type: Boolean,

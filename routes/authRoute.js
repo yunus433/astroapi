@@ -8,6 +8,7 @@ const isAPIAuthenticated = require('../middleware/isAPIAuthenticated');
 
 const phonePostController = require('../controllers/auth/phone/post');
 const codePostController = require('../controllers/auth/code/post');
+const detailsPostController = require('../controllers/auth/details/post');
 
 router.post(
   '/phone',
@@ -18,6 +19,11 @@ router.post(
   '/code',
   isAPIAuthenticated,
   codePostController
+);
+router.post(
+  '/details',
+  isAPIAuthenticated,
+  detailsPostController
 );
 
 module.exports = router;

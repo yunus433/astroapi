@@ -19,13 +19,13 @@ dotenv.config({ path: path.join(__dirname, ".env") });
 
 // define local variables
 const PORT = process.env.PORT || 3000;
-const mongoUri = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/sellingplatform";
+const mongoUri = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/astroappapi";
 
 // require local route controllers
 const authRouteController = require('./routes/authRoute');
 
 // connect mongoose to server
-mongoose.connect(mongoUri, { useNewUrlParser: true, auto_reconnect: true, useUnifiedTopology: true, useCreateIndex: true });
+mongoose.connect(mongoUri, { useNewUrlParser: true, auto_reconnect: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false });
 
 // set body parser
 app.use(bodyParser.urlencoded({ extended: false }));
