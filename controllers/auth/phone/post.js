@@ -28,7 +28,7 @@ module.exports = (req, res) => {
         sendSMS({
           phone: user.phone,
           subject: "AstroApp",
-          message: `Your Astro app verification code is ${user.phone_auth_code}`
+          message: `Your Astro app verification code is ${newUserData.phone_auth_code}`
         }, (err, result) => {
           if (err) return res.status(500).json({ error: "aws sns error" });
     
@@ -41,7 +41,7 @@ module.exports = (req, res) => {
       sendSMS({
         phone: user.phone,
         subject: "AstroApp",
-        message: `Your Astro app verification code is ${user.phone_auth_code}`
+        message: `Your Astro app verification code is ${newUserData.phone_auth_code}`
       }, (err, result) => {
         if (err) return res.status(500).json({ error: "aws sns error" });
   

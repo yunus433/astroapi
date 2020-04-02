@@ -11,11 +11,13 @@ module.exports = (req, res) => {
   req.body.birth_time = JSON.parse(req.body.birth_time);
   req.body.birth_location = JSON.parse(req.body.birth_location);
 
+  console.log((process.env.ASTRO_USER_ID + ":" + process.env.AWS_ACCESS_KEY_ID).toString('base64'));
+
   fetch('https://json.astrologyapi.com/v1/western_horoscope', {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "authorization": "Basic " + (process.env.ASTRO_USER_ID + ":" + process.env.AWS_ACCESS_KEY_ID).toString('base64'),
+      "authorization": "Basic " + (process.env.ASTRO_USER_ID + ":" + process.env.AWS_ACCESS_KEY_ID).toString('base64')
     },
     dataType:'json',
     data: JSON.stringify({
