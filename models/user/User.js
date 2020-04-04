@@ -45,22 +45,20 @@ const UserSchema = new Schema({
     type: Boolean,
     default: false
   },
-  sunSign: {
+  ascendant: {
     type: String,
+    default: ""
   },
-  risingSign: {
+  mars_sign: {
     type: String,
+    default: ""
   },
   profilePhoto: {
     type: String,
     default: ""
   },
-  best_match_combination: {
+  combination_values: {
     type: String
-  },
-  mid_match_combinations: {
-    type: Array,
-    default: []
   },
   old_matches: {
     type: Array,

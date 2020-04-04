@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const moment = require('moment')
-const fetch = require('node-fetch');
+const rp = require('request-promise-native').defaults({ family: 4 });;
+const base64 = require('base-64');
 
 const User = require('../../../models/user/User');
 
@@ -11,40 +11,62 @@ module.exports = (req, res) => {
   req.body.birth_time = JSON.parse(req.body.birth_time);
   req.body.birth_location = JSON.parse(req.body.birth_location);
 
-  console.log((process.env.ASTRO_USER_ID + ":" + process.env.AWS_ACCESS_KEY_ID).toString('base64'));
-
-  fetch('https://json.astrologyapi.com/v1/western_horoscope', {
-    method: "POST",
+  var options = {
+    method: 'POST',
+    uri: 'https://json.astrologyapi.com/v1/general_ascendant_report',
     headers: {
-      "Content-Type": "application/json",
-      "authorization": "Basic " + (process.env.ASTRO_USER_ID + ":" + process.env.AWS_ACCESS_KEY_ID).toString('base64')
+      "authorization": "Basic " + base64.encode(process.env.ASTRO_USER_ID + ":" + process.env.ASTRO_API_KEY),
+      "Content-Type": "application/json"
     },
-    dataType:'json',
-    data: JSON.stringify({
-      day: req.body.birth_time.day,
-      month: req.body.birth_time.month,
-      year: req.body.birth_time.year,
-      hour: req.body.birth_time.hour,
-      min: req.body.birth_time.min,
-      lat: req.body.birth_location.lat,
-      lon: req.body.birth_location.lon,
-      tzone: req.body.birth_time.tzone
-    })
-  })
-    .then(response => {return response.json()})
+    body: {
+      day: parseInt(req.body.birth_time.day),
+      month: parseInt(req.body.birth_time.month),
+      year: parseInt(req.body.birth_time.year),
+      hour: parseInt(req.body.birth_time.hour),
+      min: parseInt(req.body.birth_time.min),
+      lat: parseFloat(req.body.birth_location.lat),
+      lon: parseFloat(req.body.birth_location.lon),
+      tzone: parseFloat(req.body.birth_time.tzone)
+    },
+    json: true,
+    family: 4
+  };
+ 
+  rp(options)
     .then(data => {
-      console.log(data);
+      if (!data || !data.asc_report || !data.asc_report.ascendant)
+        return res.status(500).json({ error: "Couldn't get user ascendant report" });
+
+      options.uri = 'https://json.astrologyapi.com/v1/general_sign_report/tropical/:MARS';
+      const ascendant = data.asc_report.ascendant;
+
+      rp(options)
+        .then(data => {
+          if (!data || !data.sign_name)
+            return res.status(500).json({ error: "Couldn't get user Mars sign report" });
+
+          const mars_sign = data.sign_name;
+          
+          User.findByIdAndUpdate(mongoose.Types.ObjectId(req.body.id), {$set: {
+            name: req.body.name,
+            birth_time: req.body.birth_time,
+            birth_location: req.body.birth_location,
+            gender: req.body.gender,
+            wanted_gender: req.body.wanted_gender,
+            ascendant,
+            mars_sign,
+            completed: true
+          }}, {new: true}, (err, user) => {
+            if (err || !user) return res.status(500).json({ error: "Mongo Error: " + err });
+          
+            return res.status(200).json({ user });
+          });
+        })
+        .catch(err => {
+          return res.status(500).json({ error: "Internal Server Error 2: " + err });
+        });
     })
     .catch(err => {
-      console.log(err);
+      return res.status(500).json({ error: "Internal Server Error 1: " + err });
     });
-    
-  // User.findByIdAndUpdate(mongoose.Types.ObjectId(req.body.id), {$set: {
-  //   name: req.body.name,
-  //   birth_time: req.body.birth_time,
-  //   birth_location: req.body.birth_location,
-  //   gender: req.body.gender,
-  //   wanted_gender: req.body.wanted_gender
-  // }}, {new: true}, (err, user) => {
-  // })
 }
