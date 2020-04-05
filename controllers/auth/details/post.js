@@ -1,10 +1,16 @@
 const mongoose = require('mongoose');
-const rp = require('request-promise-native').defaults({ family: 4 });;
+const rp = require('request-promise').defaults({ family: 4 });;
 const base64 = require('base-64');
+
+const names = [ "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces" ];
 
 const User = require('../../../models/user/User');
 
+const getMatchRatios = require('../../../utils/getMatchRatios');
+const getUserObject = require('../../../utils/getUserObject');
+
 module.exports = (req, res) => {
+  console.log(process.env.ASTRO_USER_ID + ":" + process.env.ASTRO_API_KEY);
   if (!req.body || !req.body.id || !req.body.name || !req.body.birth_time || !req.body.birth_location || !req.body.gender || !req.body.wanted_gender)
     return res.status(400).json({ error: "bad request" });
 
@@ -15,8 +21,7 @@ module.exports = (req, res) => {
     method: 'POST',
     uri: 'https://json.astrologyapi.com/v1/general_ascendant_report',
     headers: {
-      "authorization": "Basic " + base64.encode(process.env.ASTRO_USER_ID + ":" + process.env.ASTRO_API_KEY),
-      "Content-Type": "application/json"
+      "Authorization": "Basic " + new Buffer.from(process.env.ASTRO_USER_ID + ":" + process.env.ASTRO_API_KEY).toString('base64')
     },
     body: {
       day: parseInt(req.body.birth_time.day),
@@ -28,8 +33,7 @@ module.exports = (req, res) => {
       lon: parseFloat(req.body.birth_location.lon),
       tzone: parseFloat(req.body.birth_time.tzone)
     },
-    json: true,
-    family: 4
+    json: true
   };
  
   rp(options)
@@ -46,20 +50,36 @@ module.exports = (req, res) => {
             return res.status(500).json({ error: "Couldn't get user Mars sign report" });
 
           const mars_sign = data.sign_name;
-          
-          User.findByIdAndUpdate(mongoose.Types.ObjectId(req.body.id), {$set: {
-            name: req.body.name,
-            birth_time: req.body.birth_time,
-            birth_location: req.body.birth_location,
-            gender: req.body.gender,
-            wanted_gender: req.body.wanted_gender,
+
+          getMatchRatios({
+            option: "get matches",
             ascendant,
-            mars_sign,
-            completed: true
-          }}, {new: true}, (err, user) => {
-            if (err || !user) return res.status(500).json({ error: "Mongo Error: " + err });
-          
-            return res.status(200).json({ user });
+            mars_sign
+          }, (err, matches) => {
+            if (err) return res.status(500).json({ error: err });
+
+            User.findByIdAndUpdate(mongoose.Types.ObjectId(req.body.id), {$set: {
+              name: req.body.name,
+              birth_time: req.body.birth_time,
+              birth_location: req.body.birth_location,
+              gender: req.body.gender,
+              wanted_gender: req.body.wanted_gender,
+              sign: ascendant,
+              sign_id: names.indexOf(ascendant) + 1,
+              sign_combination: ascendant + "/" + mars_sign,
+              best_matches: matches.best_matches,
+              mid_matches: matches.mid_matches,
+              last_active: Date.now(),
+              completed: true
+            }}, {new: true}, (err, user) => {
+              if (err || !user) return res.status(500).json({ error: "Mongo Error: " + err });
+
+              User.collection.createIndex({ last_active: 1 }, (err, result) => {
+                if (err) return res.status(500).json({ error: "Mongo Error: " + err });
+
+                return res.status(200).json({ user: getUserObject(user) });
+              });
+            });
           });
         })
         .catch(err => {

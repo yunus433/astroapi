@@ -9,6 +9,8 @@ const socketIO = require('socket.io');
 
 const sockets = require('./sockets/sockets');
 
+const astroAPI = require('./utils/astroAPI');
+
 // create server
 const app = express();
 const server = http.createServer(app);
@@ -23,6 +25,7 @@ const mongoUri = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/astroappa
 
 // require local route controllers
 const authRouteController = require('./routes/authRoute');
+const userRouteController = require('./routes/userRoute');
 
 // connect mongoose to server
 mongoose.connect(mongoUri, { useNewUrlParser: true, auto_reconnect: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false });
@@ -39,6 +42,7 @@ app.use((req, res, next) => {
 
 // add route controllers
 app.use('/auth', authRouteController);
+app.use('/user', userRouteController);
 
 // listen for socket.io connection
 io.on('connection', (socket) => {
@@ -48,4 +52,7 @@ io.on('connection', (socket) => {
 // start server
 server.listen(PORT, () => {
   console.log(`Server is on port ${PORT}`);
+  // astroAPI.call("general_ascendant_report", 7, 4, 2003, 7, 53, 41.008240, 28.978359, 3, (err, data) => {
+  //   console.log(err, data);
+  // });
 });

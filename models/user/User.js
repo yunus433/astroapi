@@ -3,6 +3,12 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
+  phone: {
+    type: String,
+    required: true,
+    minlength: 1,
+    unique: true
+  },
   last_active: {
     type: Number,
     required: true
@@ -10,12 +16,6 @@ const UserSchema = new Schema({
   created_at: {
     type: Number,
     required: true
-  },
-  phone: {
-    type: String,
-    required: true,
-    minlength: 1,
-    unique: true
   },
   phone_auth_code: {
     type: String,
@@ -45,11 +45,15 @@ const UserSchema = new Schema({
     type: Boolean,
     default: false
   },
-  ascendant: {
+  sign: {
     type: String,
     default: ""
   },
-  mars_sign: {
+  sign_id: {
+    type: Number,
+    default: -1
+  },
+  sign_combination: {
     type: String,
     default: ""
   },
@@ -57,8 +61,13 @@ const UserSchema = new Schema({
     type: String,
     default: ""
   },
-  combination_values: {
-    type: String
+  best_matches: {
+    type: Array,
+    default: []
+  },
+  mid_matches: {
+    type: Array,
+    default: []
   },
   old_matches: {
     type: Array,
