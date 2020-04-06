@@ -57,9 +57,9 @@ const UserSchema = new Schema({
     type: String,
     default: ""
   },
-  profilePhoto: {
-    type: String,
-    default: ""
+  profile_photo_list: {
+    type: Array,
+    default:[] 
   },
   best_matches: {
     type: Array,

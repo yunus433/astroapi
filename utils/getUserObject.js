@@ -7,6 +7,6 @@ module.exports = user => {
     completed: user.completed,
     sign: user.sign,
     sign_id: user.sign_id,
-    profile_photo: user.profile_photo
+    profile_photo_list: user.profile_photo_list
   }
 }
