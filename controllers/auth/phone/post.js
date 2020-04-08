@@ -1,3 +1,5 @@
+const validator = require('validator');
+
 const User = require('../../../models/user/User');
 
 const sendSMS = require('../../../utils/sendSMS')
@@ -5,6 +7,9 @@ const sendSMS = require('../../../utils/sendSMS')
 module.exports = (req, res) => {
   if (!req.body || !req.body.phone)
     return res.status(400).json({ error: "bad request" });
+  
+  if (!validator.isMobilePhone(req.body.phone))
+    return res.status(400).json({ error: "not valid phone number" });
 
   const newUserData = {
     phone: req.body.phone,

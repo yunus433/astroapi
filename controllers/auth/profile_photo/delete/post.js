@@ -13,14 +13,14 @@ const getUserObject = require('../../../../utils/getUserObject');
 
 module.exports = (req, res) => {
   if (!req.body || !req.body.id || !req.body.image)
-    return res.status(400).json({ error: "Bad request" });
+    return res.status(400).json({ error: "bad request" });
 
   User.findById(mongoose.Types.ObjectId(req.body.id), (err, user) => {
     if (err || !user)
       return res.status(500).json({ error: "Mongo Error: " + err });
 
     if (!user.profile_photo_list.includes(req.body.image))
-      return res.status(400).json({ error: "Photo not found" });
+      return res.status(400).json({ error: "photo not found" });
 
     const params = {
       Bucket: process.env.AWS_BUCKET_NAME,

@@ -13,14 +13,14 @@ const getUserObject = require('../../../utils/getUserObject');
 
 module.exports = (req, res) => {
   if (!req.file || !req.query || !req.query.id)
-    return res.status(400).json({ error: "Bad request" });
+    return res.status(400).json({ error: "bad request" });
 
   User.findById(mongoose.Types.ObjectId(req.query.id), (err, user) => {
     if (err || !user)
       return res.status(500).json({ error: "Mongo Error: " + err });
 
     if (user.profile_photo_list.size > 5)
-      return res.status(400).json({ error: "User already have 6 photos" });
+      return res.status(400).json({ error: "user already have 6 photos" });
 
     const fileContent = fs.readFileSync("./public/res/uploads/" + req.file.filename);
 
