@@ -8,6 +8,7 @@ module.exports = user => {
     completed: user.completed,
     sign: user.sign,
     sign_id: user.sign_id,
-    profile_photo_list: user.profile_photo_list
+    profile_photo_list: user.profile_photo_list,
+    notification_permission: user.notification_permission
   }
 }

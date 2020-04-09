@@ -4,6 +4,7 @@ const User = require('../../models/user/User');
 const Chat = require('../../models/chat/Chat');
 
 const getUserObject = require('../../utils/getUserObject');
+const sendNotification = require('../../utils/sendNotification');
 
 module.exports = (req, res) => {
   if (!req.body || !req.body.id || !req.body.user || !req.body.accept)
@@ -43,9 +44,16 @@ module.exports = (req, res) => {
             }}, {}, err => {
               if (err) return res.status(500).json({ error: "Mongo Error: " + err });
     
-              return res.status(200).json({
-                "new_match": true,
-                "chat_id": chat._id.toString()
+              sendNotification({
+                to: req.body.user,
+                message: "You have a new chat!"
+              }, (err, response) => {
+                if (err) return res.status(500).json({ error: "Notification Error: " + err });
+                
+                return res.status(200).json({
+                  "new_match": true,
+                  "chat_id": chat._id.toString()
+                });
               });
             });
           });

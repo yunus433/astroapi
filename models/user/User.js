@@ -100,6 +100,14 @@ const UserSchema = new Schema({
   chat_list: {
     type: Array,
     default: []
+  },
+  notification_permission: {
+    type: Boolean,
+    default: false
+  },
+  notification_token: {
+    type: String,
+    default: ""
   }
 });
 
