@@ -9,8 +9,6 @@ const socketIO = require('socket.io');
 
 const sockets = require('./sockets/sockets');
 
-const astroAPI = require('./utils/astroAPI');
-
 // create server
 const app = express();
 const server = http.createServer(app);
@@ -52,7 +50,4 @@ io.on('connection', (socket) => {
 // start server
 server.listen(PORT, () => {
   console.log(`Server is on port ${PORT}`);
-  // astroAPI.call("general_ascendant_report", 7, 4, 2003, 7, 53, 41.008240, 28.978359, 3, (err, data) => {
-  //   console.log(err, data);
-  // });
 });

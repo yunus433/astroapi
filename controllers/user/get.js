@@ -13,8 +13,10 @@ module.exports = (req, res) => {
   }}, {new: true}, (err, user) => {
     if (err) return res.status(500).json({ error: "Mongo Error: " + err });
 
-    return res.status(200).json({
-      user: getUserObject(user)
+    User.collection.createIndex({ last_active: 1 }, (err, result) => {
+      if (err) return res.status(500).json({ error: "Mongo Error: " + err });
+
+      return res.status(200).json({ user: getUserObject(user) });
     });
   });
 };

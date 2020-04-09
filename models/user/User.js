@@ -33,6 +33,22 @@ const UserSchema = new Schema({
     type: String,
     default: ""
   },
+  city: {
+    type: String,
+    default: ""
+  },
+  country: {
+    type: String,
+    default: ""
+  },
+  age: {
+    type: String,
+    default: ""
+  },
+  age_interval: {
+    type: Object,
+    default: {}
+  },
   birth_time: {
     type: Object,
     default: {}
@@ -42,6 +58,10 @@ const UserSchema = new Schema({
     default: {}
   },
   completed: {
+    type: Boolean,
+    default: false
+  },
+  is_premium: {
     type: Boolean,
     default: false
   },
@@ -70,6 +90,14 @@ const UserSchema = new Schema({
     default: []
   },
   old_matches: {
+    type: Array,
+    default: []
+  },
+  matched_users: {
+    type: Array,
+    default: []
+  },
+  chat_list: {
     type: Array,
     default: []
   }
