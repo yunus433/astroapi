@@ -41,10 +41,6 @@ const UserSchema = new Schema({
     type: String,
     default: ""
   },
-  age: {
-    type: String,
-    default: ""
-  },
   age_interval: {
     type: Object,
     default: {}
@@ -106,6 +102,10 @@ const UserSchema = new Schema({
     default: false
   },
   notification_token: {
+    type: String,
+    default: ""
+  },
+  language_preference: {
     type: String,
     default: ""
   }

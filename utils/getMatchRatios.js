@@ -782,10 +782,10 @@ module.exports = (params, callback) => {
     all_matches.reverse();
 
     for (let i = 0; i < 10; i++)
-      best_matches.push(all_matches[i]);
+      best_matches.push(all_matches[i][3]);
     
     for (let i = 10; i < 30; i++)
-      mid_matches.push(all_matches[i]);
+      mid_matches.push(all_matches[i][3]);
 
     return callback(false, {
       best_matches,

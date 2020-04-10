@@ -29,10 +29,12 @@ const getUsers = (option, user, limit, callback) => {
     }),
     city: user.city,
     country: user.country,
-    age: {$and: [
-      {$gte: user.age_interval.min},
-      {$lte: user.age_interval.max}
-    ]}
+    birth_time: {
+      year: {$and: [
+        {$gte: user.age_interval.max},
+        {$lte: user.age_interval.min}
+      ]}
+    }
   };
 
   User

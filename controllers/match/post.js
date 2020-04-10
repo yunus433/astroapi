@@ -15,7 +15,7 @@ module.exports = (req, res) => {
   }}, (err, user) => {
     if (err) return res.status(500).json({ error: "Mongo Error: " + err });
 
-    if (req.body.accept == true) {
+    if (req.body.accept) {
       if (user.matched_users.includes(req.body.user)) {
         const newChatData = {
           user_one: req.body.user,

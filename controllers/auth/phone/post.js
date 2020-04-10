@@ -36,7 +36,7 @@ module.exports = (req, res) => {
           message: `Your Astro app verification code is ${newUserData.phone_auth_code}`
         }, (err, result) => {
           if (err) return res.status(500).json({ error: "aws sns error" });
-    
+
           return res.status(200).json({ user_id: user._id });
         });
       })
