@@ -12,7 +12,8 @@ module.exports = (req, res) => {
     last_active: Date.now(),
     country: req.body.country,
     city: req.body.city,
-    time_zone: geotz(parseFloat(req.body.location.lat), parseFloat(req.body.location.lon))[0]
+    time_zone: geotz(parseFloat(req.body.location.lat), parseFloat(req.body.location.lon))[0],
+    language_preference: req.body.language,
   }}, {new: true}, (err, user) => {
     if (err) return res.status(500).json({ error: "Mongo Error: " + err });
     

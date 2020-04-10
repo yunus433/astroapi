@@ -47,7 +47,7 @@ const getMatchRatios = require('../../../utils/getMatchRatios');
 const getUserObject = require('../../../utils/getUserObject');
 
 module.exports = async (req, res) => {
-  if (!req.body || !req.body.id || !req.body.name || !req.body.birth_time || !req.body.birth_location || !req.body.gender || !req.body.country || !req.body.city || !req.body.language)
+  if (!req.body || !req.body.id || !req.body.name || !req.body.birth_time || !req.body.birth_location || !req.body.gender)
     return res.status(400).json({ error: "bad request" });
 
   req.body.birth_time = JSON.parse(req.body.birth_time);
@@ -55,7 +55,7 @@ module.exports = async (req, res) => {
 
   if (getUserAge(req.body.birth_time.month, req.body.birth_time.year) < 18)
     return res.status(400).json({ error: "user should be bigger than 18" })
-  
+
   let astrologer = new Astrologer();
   const sign = calculateSign(req.body.birth_time.day, req.body.birth_time.month);
 
@@ -81,17 +81,15 @@ module.exports = async (req, res) => {
           min: req.body.birth_time.year + 5,
           max: req.body.birth_time.year - 5
         },
-        city: req.body.city,
-        country: req.body.country,
-        language_preference: req.body.language,
         gender: req.body.gender,
         wanted_gender: req.body.gender == "male" ? "female" : "male",
         sign,
         sign_id: names.indexOf(sign) + 1,
         sign_combination: sign + "/" + planets.CelestialBodies[4].ZodiacSign.Name,
+        mars_sign: planets.CelestialBodies[4].ZodiacSign.Name,
+        venus_sign: planets.CelestialBodies[3].ZodiacSign.Name,
         best_matches: matches.best_matches,
         mid_matches: matches.mid_matches,
-        last_active: Date.now(),
         completed: true
       }}, {new: true}, (err, user) => {
         if (err || !user) return res.status(500).json({ error: "Mongo Error: " + err });

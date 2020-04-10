@@ -73,6 +73,14 @@ const UserSchema = new Schema({
     type: Number,
     default: -1
   },
+  mars_sign: {
+    type: String,
+    default: ""
+  },
+  venus_sign: {
+    type: String,
+    default: ""
+  },
   sign_combination: {
     type: String,
     default: ""
