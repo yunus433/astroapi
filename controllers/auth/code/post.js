@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 
 const User = require('../../../models/user/User');
 
+const getUserObject = require('../../../utils/getUserObject');
+
 module.exports = (req, res) => {
   const req_time = Date.now();
   const five_min = 300000;
@@ -21,7 +23,7 @@ module.exports = (req, res) => {
       }}, {new: true}, (err, user) => {
         if (err) return res.status(500).json({ error: "unknown error" });
 
-        return res.status(200).json({ user });
+        return res.status(200).json({ user: getUserObject(user) });
       });
     } else {
       return res.status(400).json({ error: "wrong auth code" });

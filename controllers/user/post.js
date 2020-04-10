@@ -5,13 +5,14 @@ const User = require('../../models/user/User');
 const getUserObject = require('../../utils/getUserObject');
 
 module.exports = (req, res) => {
-  if (!req.query || !req.query.id || !req.query.country || !req.query.city)
+  if (!req.body || !req.body.id || !req.body.country || !req.body.city || !req.body.location)
     return res.status(400).json({ error: "bad request" });
 
   User.findByIdAndUpdate(mongoose.Types.ObjectId(req.query.id), {$set: {
     last_active: Date.now(),
-    country: req.query.country,
-    city: req.query.city
+    country: req.body.country,
+    city: req.body.city,
+    time_zone: geotz(parseFloat(req.body.location.lat), parseFloat(req.body.location.lon))[0]
   }}, {new: true}, (err, user) => {
     if (err) return res.status(500).json({ error: "Mongo Error: " + err });
     

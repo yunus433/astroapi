@@ -25,6 +25,7 @@ const mongoUri = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/astroappa
 const authRouteController = require('./routes/authRoute');
 const userRouteController = require('./routes/userRoute');
 const matchRouteController = require('./routes/matchRoute');
+const chatRouteController = require('./routes/chatRoute');
 
 // connect mongoose to server
 mongoose.connect(mongoUri, { useNewUrlParser: true, auto_reconnect: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false });
@@ -43,6 +44,7 @@ app.use((req, res, next) => {
 app.use('/auth', authRouteController);
 app.use('/user', userRouteController);
 app.use('/match', matchRouteController);
+app.use('/chat', chatRouteController);
 
 // listen for socket.io connection
 io.on('connection', (socket) => {

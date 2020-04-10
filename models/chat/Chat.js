@@ -4,11 +4,11 @@ const Schema = mongoose.Schema;
 
 const ChatSchema = new Schema({
   user_one: {
-    type: String,
+    type: Object,
     required: true
   },
   user_two: {
-    type: String,
+    type: Object,
     required: true
   },
   messages: {

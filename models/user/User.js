@@ -53,6 +53,10 @@ const UserSchema = new Schema({
     type: Object,
     default: {}
   },
+  time_zone: {
+    type: String,
+    default: ""
+  },
   completed: {
     type: Boolean,
     default: false
