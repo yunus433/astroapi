@@ -5,6 +5,7 @@ const getCharObjects = (chat_list) => {
 
   chat_list.forEach(chat => {
     new_list.push({
+      _id: chat._id,
       user_one: chat.user_one,
       user_two: chat.user_two,
       last_message: chat.messages[chat.messages.size()-1]
