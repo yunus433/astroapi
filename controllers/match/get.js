@@ -91,7 +91,7 @@ module.exports = (req, res) => {
   User.findById(mongoose.Types.ObjectId(req.query.id), (err, user) => {
     if (err) return res.status(500).json({ error: "Mongo Error: " + err });
     main_user = user;
-    const limit = req.query.limit;
+    let limit = req.query.limit;
     limit -= user.matched_users.length;
 
     if (limit > 0) {
