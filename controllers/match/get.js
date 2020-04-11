@@ -85,7 +85,7 @@ const getUsers = (option, user, limit, callback) => {
 };
 
 module.exports = (req, res) => {
-  if (!req.query || req.query.id || !req.query.limit)
+  if (!req.query || !req.query.id || !req.query.limit)
     return res.status(400).json({ error: "Bad request" });
 
   User.findById(mongoose.Types.ObjectId(req.query.id), (err, user) => {
