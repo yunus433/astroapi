@@ -63,7 +63,7 @@ const getUsers = (option, user, limit, callback) => {
     .sort({ last_active: 1 })
     .limit(limit)
     .then(users => {
-      if (user.size() == limit)
+      if (user.length == limit)
         return callback(null, users);
 
       preferences.city = { $ne: user.city };
@@ -71,7 +71,7 @@ const getUsers = (option, user, limit, callback) => {
       User
         .find(preferences)
         .sort({ last_active: 1 })
-        .limit(limit - users.size())
+        .limit(limit - users.length)
         .then(all_users => {
           return callback(null, users + all_users);
         })
@@ -92,23 +92,23 @@ module.exports = (req, res) => {
     if (err) return res.status(500).json({ error: "Mongo Error: " + err });
     main_user = user;
     const limit = req.query.limit;
-    limit -= user.matched_users.size();
+    limit -= user.matched_users.length;
 
     if (limit > 0) {
       if (user.is_premium) {
         getUsers("best", user, limit, (err, users) => {
           if (err) return res.status(500).json({ error: err });
   
-          if (users.size() == limit)
+          if (users.length == limit)
             return res.status(200).json({ matches: getUserObjects(users) + user.matched_users });
           
-          getUsers("mid", user, (limit - users.size()), (err, mid_users) => {
+          getUsers("mid", user, (limit - users.length), (err, mid_users) => {
             if (err) return res.status(500).json({ error: err });
   
-            if (mid_users.size() == (limit - users.size()))
+            if (mid_users.length == (limit - users.length))
               return res.status(200).json({ matches: getUserObjects(users) + user.matched_users + getUserObjects(mid_users) });
   
-            getUsers("all", user, (limit - users.size() - mid_users.size()), (err, all_users) => {
+            getUsers("all", user, (limit - users.length - mid_users.length), (err, all_users) => {
               if (err) return res.status(500).json({ error: err });
   
               return res.status(200).json({ matches: getUserObjects(users) + user.matched_users + getUserObjects(mid_users) + getUserObjects(all_users) });
@@ -119,10 +119,10 @@ module.exports = (req, res) => {
         getUsers("mid", user, limit, (err, mid_users) => {
           if (err) return res.status(500).json({ error: err });
   
-          if (mid_users.size() == limit)
+          if (mid_users.length == limit)
             return res.status(200).json({ matches: getUserObjects(mid_users) + user.matched_users });
   
-          getUsers("all", user, (limit - mid_users.size()), (err, all_users) => {
+          getUsers("all", user, (limit - mid_users.length), (err, all_users) => {
             if (err) return res.status(500).json({ error: err });
   
             return res.status(200).json({ matches: getUserObjects(mid_users) + user.matched_users + getUserObjects(all_users) });
