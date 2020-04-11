@@ -22,6 +22,9 @@ module.exports = (req, res) => {
     if (!user.profile_photo_list.includes(req.body.image))
       return res.status(400).json({ error: "photo not found" });
 
+    if (user.profile_photo_list.length == 1)
+      return res.status(400).json({ error: "user has only one photo" });
+
     const params = {
       Bucket: process.env.AWS_BUCKET_NAME,
       Key: req.body.image.split('com/')[1]

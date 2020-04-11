@@ -61,6 +61,10 @@ const UserSchema = new Schema({
     type: Boolean,
     default: false
   },
+  photo_completed: {
+    type: Boolean,
+    default: false
+  },
   is_premium: {
     type: Boolean,
     default: false

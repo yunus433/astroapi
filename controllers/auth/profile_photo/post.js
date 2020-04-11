@@ -19,9 +19,15 @@ module.exports = (req, res) => {
     uploadPhotoToAWS(req.file.filename, (err, location) => {
       if (err) return res.status(500).json({ error: "AWS Error: " + err });
     
-      User.findByIdAndUpdate(mongoose.Types.ObjectId(req.query.id), {$push: {
-        "profile_photo_list": location
-      }}, {new: true}, (err, user) => {
+      User.findByIdAndUpdate(mongoose.Types.ObjectId(req.query.id), {
+        $push: {
+          "profile_photo_list": location,
+          "photo_completed": true
+        },
+        $pull: {
+          "profile_photo_list": "https://astroappapi.s3.amazonaws.com/5b4769dfa842771f59deb32e25ce6ded"
+        }
+      }, {new: true}, (err, user) => {
         if (err || !user)
           return res.status(500).json({ error: "Mongo Error: " + err });
 
