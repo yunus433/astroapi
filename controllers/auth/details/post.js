@@ -50,8 +50,8 @@ module.exports = async (req, res) => {
   if (!req.body || !req.body.id || !req.body.name || !req.body.birth_time || !req.body.birth_location || !req.body.gender)
     return res.status(400).json({ error: "bad request" });
 
-  // req.body.birth_time = JSON.parse(req.body.birth_time);
-  // req.body.birth_location = JSON.parse(req.body.birth_location);
+  req.body.birth_time = JSON.parse(req.body.birth_time);
+  req.body.birth_location = JSON.parse(req.body.birth_location);
 
   if (getUserAge(req.body.birth_time.month, req.body.birth_time.year) < 18)
     return res.status(400).json({ error: "user should be bigger than 18" })
@@ -69,7 +69,8 @@ module.exports = async (req, res) => {
     getMatchRatios({
       option: "get matches",
       ascendant: sign,
-      mars_sign: planets.CelestialBodies[4].ZodiacSign.Name
+      mars_sign: planets.CelestialBodies[4].ZodiacSign.Name,
+      venus_sign: planets.CelestialBodies[3].ZodiacSign.Name
     }, (err, matches) => {
       if (err) return res.status(500).json({ error: err });
 
@@ -85,7 +86,7 @@ module.exports = async (req, res) => {
         wanted_gender: req.body.gender == "male" ? "female" : "male",
         sign,
         sign_id: names.indexOf(sign) + 1,
-        sign_combination: sign + "/" + planets.CelestialBodies[4].ZodiacSign.Name,
+        sign_combination: sign + "/" + planets.CelestialBodies[4].ZodiacSign.Name + "/" + planets.CelestialBodies[3].ZodiacSign.Name,
         mars_sign: planets.CelestialBodies[4].ZodiacSign.Name,
         venus_sign: planets.CelestialBodies[3].ZodiacSign.Name,
         best_matches: matches.best_matches,

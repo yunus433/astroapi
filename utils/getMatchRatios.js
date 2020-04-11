@@ -749,13 +749,13 @@ const combinations = {
 
 module.exports = (params, callback) => {
   if (params.option == "get matches") {
-    const ascendant = params.ascendant, mars_sign = params.mars_sign;
+    const ascendant = params.ascendant, mars_sign = params.mars_sign, venus_sign = params.venus_sign;
 
     if (!names.includes(ascendant) || !names.includes(mars_sign))
       return callback("Unknown values for ascendant and mars sign");
 
     const all_matches = [], best_matches = [], mid_matches = [];
-    const ascendant_values = [], mars_sign_values = [];
+    const ascendant_values = [], mars_sign_values = [], venus_sign_values = [];
 
     names.forEach(name => {
       const newArray = [combinations[ascendant][name].compatibility, combinations[ascendant][name].sex, combinations[ascendant][name].communication, name];
@@ -767,14 +767,21 @@ module.exports = (params, callback) => {
       mars_sign_values.push(newArray);
     });
 
+    names.forEach(name => {
+      const newArray = [combinations[venus_sign][name].compatibility, name];
+      venus_sign_values.push(newArray);
+    });
+
     ascendant_values.forEach(asc_value => {
       mars_sign_values.forEach(mars_value => {
-        const newArray = [];
-        newArray.push((asc_value[0] + mars_value[0]) / 2);
-        newArray.push((asc_value[1] + mars_value[1]) / 2);
-        newArray.push((asc_value[2] + mars_value[2]) / 2);
-        newArray.push(asc_value[3] + "/" + mars_value[3]);
-        all_matches.push(newArray);
+        venus_sign_values.forEach(venus_value => {
+          const newArray = [];
+          newArray.push((asc_value[0] + mars_value[0] + venus_value[0]) / 3);
+          newArray.push((asc_value[1] + mars_value[1]) / 2);
+          newArray.push((asc_value[2] + mars_value[2]) / 2);
+          newArray.push(asc_value[3] + "/" + mars_value[3] + "/" + venus_value[1]);
+          all_matches.push(newArray);
+        });
       });
     });
 
