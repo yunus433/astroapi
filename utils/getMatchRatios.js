@@ -802,8 +802,8 @@ module.exports = (params, callback) => {
     const user_one = params.user_one, user_two = params.user_two;
     
     callback(null, {
-      communication: (combinations[user_one.sign][user_two.sign].communication + combinations[user_one.mars_sign][user_two.sign].communication) / 2,
-      sex: (combinations[user_one.sign][user_two.sign].sex + combinations[user_one.mars_sign][user_two.sign].sex) / 2,
+      communication: parseInt((combinations[user_one.sign][user_two.sign].communication + combinations[user_one.mars_sign][user_two.sign].communication) / 2 * 100) / 100,
+      sex: parseInt((combinations[user_one.sign][user_two.sign].sex + combinations[user_one.mars_sign][user_two.sign].sex) / 2 * 100) / 100,
       love: combinations[user_one.venus_sign][user_two.venus_sign].compatibility
     });
   } else {
