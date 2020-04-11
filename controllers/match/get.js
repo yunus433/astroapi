@@ -3,12 +3,33 @@ const mongoose = require('mongoose');
 const User = require('../../models/user/User');
 
 const getUserObject = require('../../utils/getUserObject');
+const getMatchRatios = require('../../utils/getMatchRatios');
+
+let main_user;
 
 const getUserObjects = (users) => {
   const arr = [];
 
   users.forEach(user => {
-    arr.push(getUserObject(user));
+    const new_user = getUserObject(user);
+
+    getMatchRatios({
+      option: "get compatibility",
+      user_one: {
+        sign: main_user.sign,
+        mars_sign: main_user.mars_sign,
+        venus_sign: main_user.venus_sign
+      },
+      user_two: {
+        sign: user.sign,
+        mars_sign: user.mars_sign,
+        venus_sign: user.venus_sign
+      }
+    }, (err, matching_ratio) => {
+      new_user.matching_ratio = matching_ratio;
+
+      arr.push(new_user);
+    });
   });
 
   return arr;
@@ -69,7 +90,7 @@ module.exports = (req, res) => {
 
   User.findById(mongoose.Types.ObjectId(req.query.id), (err, user) => {
     if (err) return res.status(500).json({ error: "Mongo Error: " + err });
-
+    main_user = user;
     const limit = req.query.limit;
     limit -= user.matched_users.size();
 

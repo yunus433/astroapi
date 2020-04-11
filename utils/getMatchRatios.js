@@ -792,13 +792,11 @@ module.exports = (params, callback) => {
       mid_matches
     });
   } else if (params.option == "get compatibity") {
-    const ascendant_one = params.combination_one.split("/")[0], ascendant_two = params.combination_two.split("/")[0];
-    const mars_sign_one = params.combination_one.split("/")[1], mars_sign_two = params.combination_two.split("/")[1];
 
     callback(null, {
-      communication: (combinations[ascendant_one][ascendant_two].communication + combinations[mars_sign_one][mars_sign_two].communication) / 2,
-      sex: (combinations[ascendant_one][ascendant_two].sex + combinations[mars_sign_one][mars_sign_two].sex) / 2,
-      compatibity: (combinations[ascendant_one][ascendant_two].compatibility + combinations[mars_sign_one][mars_sign_two].compatibility) / 2,
+      communication: (combinations[user_one.sign][user_two.sign].communication + combinations[user_one.mars_sign][user_two.sign].communication) / 2,
+      sex: (combinations[user_one.sign][user_two.sign].sex + combinations[user_one.mars_sign][user_two.sign].sex) / 2,
+      love: combinations[user_one.venus_sign][user_two.venus_sign].compatibility
     });
   } else {
     return callback("Unknown option selected");

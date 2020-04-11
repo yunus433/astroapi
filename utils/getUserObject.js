@@ -5,7 +5,7 @@ const getUserAge = (month, year) => {
   return (curr_year - year - 1) + parseInt((12 - month + curr_month) / 12);
 };
 
-module.exports = user => {
+module.exports = (user) => {
   return {
     _id: user._id,
     name: user.name,
