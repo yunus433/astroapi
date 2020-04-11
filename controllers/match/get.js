@@ -8,6 +8,9 @@ const getMatchRatios = require('../../utils/getMatchRatios');
 let main_user;
 
 const getUserObjects = (users) => {
+  if (!users.length)
+    return [];
+
   const arr = [];
 
   users.forEach(user => {
@@ -41,8 +44,14 @@ const getUsers = (option, user, limit, callback) => {
     _id: {
       $nin: user.old_matches
     },
-    gender: (user.wanted_gender == "both" ? {$or: ["male", "female"]} : user.wanted_gender),
-    wanted_gender: {$or: ["both", user.gender]},
+    $or: [
+      {gender: (user.wanted_gender == "both" ? "male" : user.wanted_gender)},
+      {gender: (user.wanted_gender == "both" ? "female" : user.wanted_gender)},
+    ],
+    $or: [
+      {wanted_gender: "both"}, 
+      {wanted_gender: user.gender}
+    ],
     sign_combination: (option == "all" ? {
       $exists: true
     } : {
@@ -73,7 +82,7 @@ const getUsers = (option, user, limit, callback) => {
         .sort({ last_active: 1 })
         .limit(limit - users.length)
         .then(all_users => {
-          return callback(null, users + all_users);
+          return callback(null, users.concat(all_users));
         })
         .catch(err => {
           if (err) return callback(err);
@@ -100,18 +109,18 @@ module.exports = (req, res) => {
           if (err) return res.status(500).json({ error: err });
   
           if (users.length == limit)
-            return res.status(200).json({ matches: getUserObjects(users) + user.matched_users });
+            return res.status(200).json({ matches: getUserObjects(users).concat(user.matched_users) });
           
           getUsers("mid", user, (limit - users.length), (err, mid_users) => {
             if (err) return res.status(500).json({ error: err });
   
             if (mid_users.length == (limit - users.length))
-              return res.status(200).json({ matches: getUserObjects(users) + user.matched_users + getUserObjects(mid_users) });
+              return res.status(200).json({ matches: getUserObjects(users).concat(user.matched_users).concat(getUserObjects(mid_users)) });
   
             getUsers("all", user, (limit - users.length - mid_users.length), (err, all_users) => {
               if (err) return res.status(500).json({ error: err });
   
-              return res.status(200).json({ matches: getUserObjects(users) + user.matched_users + getUserObjects(mid_users) + getUserObjects(all_users) });
+              return res.status(200).json({ matches: getUserObjects(users).concat(user.matched_users).concat(getUserObjects(mid_users)).concat(getUserObjects(all_users)) });
             });
           });
         });
@@ -120,12 +129,12 @@ module.exports = (req, res) => {
           if (err) return res.status(500).json({ error: err });
   
           if (mid_users.length == limit)
-            return res.status(200).json({ matches: getUserObjects(mid_users) + user.matched_users });
+            return res.status(200).json({ matches: getUserObjects(mid_users).concat(user.matched_users) });
   
           getUsers("all", user, (limit - mid_users.length), (err, all_users) => {
             if (err) return res.status(500).json({ error: err });
   
-            return res.status(200).json({ matches: getUserObjects(mid_users) + user.matched_users + getUserObjects(all_users) });
+            return res.status(200).json({ matches: getUserObjects(mid_users).concat(user.matched_users).concat(getUserObjects(all_users)) });
           });
         });
       };
