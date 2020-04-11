@@ -50,6 +50,9 @@ module.exports = async (req, res) => {
   if (!req.body || !req.body.id || !req.body.name || !req.body.birth_time || !req.body.birth_location || !req.body.gender)
     return res.status(400).json({ error: "bad request" });
 
+  // req.body.birth_time = JSON.parse(req.body.birth_time);
+  // req.body.birth_location = JSON.parse(req.body.birth_location);
+
   if (getUserAge(req.body.birth_time.month, req.body.birth_time.year) < 18)
     return res.status(400).json({ error: "user should be bigger than 18" })
 
@@ -87,6 +90,7 @@ module.exports = async (req, res) => {
         venus_sign: planets.CelestialBodies[3].ZodiacSign.Name,
         best_matches: matches.best_matches,
         mid_matches: matches.mid_matches,
+        old_matches: [req.body.id],
         completed: true
       }}, {new: true}, (err, user) => {
         if (err || !user) return res.status(500).json({ error: "Mongo Error: " + err });

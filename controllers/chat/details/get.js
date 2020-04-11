@@ -11,6 +11,7 @@ module.exports = (req, res) => {
     return res.status(400).json({ error: "bad request" });
 
   User.findById(mongoose.Types.ObjectId(req.query.id), (err, user) => {
+    if (err) return res.status(500).json({ error: "Mongo Error: " + err });
     Chat.findById(mongoose.Types.ObjectId(req.query.chat_id), (err, chat) => {
       if (err) return res.status(500).json({ error: "Mongo Error: " + err });
   
