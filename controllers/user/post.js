@@ -5,7 +5,7 @@ const User = require('../../models/user/User');
 const getUserObject = require('../../utils/getUserObject');
 
 module.exports = (req, res) => {
-  if (!req.body || !req.body.id || !req.body.country || !req.body.city || !req.body.location)
+  if (!req.body || !req.body.id || !req.body.country || !req.body.city || !req.body.location || !req.body.language)
     return res.status(400).json({ error: "bad request" });
 
   User.findByIdAndUpdate(mongoose.Types.ObjectId(req.query.id), {$set: {
