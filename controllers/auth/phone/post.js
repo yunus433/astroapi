@@ -14,8 +14,8 @@ module.exports = (req, res) => {
   const newUserData = {
     phone: req.body.phone,
     phone_auth_code: Math.floor(100000 + Math.random() * 900000),
-    last_active: Date.now(),
-    created_at: Date.now()
+    last_active: (new Date()).getTime(),
+    created_at: (new Date()).getTime()
   };
 
   const newUser = new User(newUserData);

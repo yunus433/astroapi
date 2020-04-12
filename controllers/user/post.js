@@ -10,7 +10,7 @@ module.exports = (req, res) => {
     return res.status(400).json({ error: "bad request" });
 
   User.findByIdAndUpdate(mongoose.Types.ObjectId(req.body.id), {$set: {
-    last_active: Date.now(),
+    last_active: (new Date()).getTime(),
     country: req.body.country,
     city: req.body.city,
     time_zone: geotz(parseFloat(req.body.location.lat), parseFloat(req.body.location.lon))[0],

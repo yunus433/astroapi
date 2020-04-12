@@ -18,7 +18,7 @@ module.exports = (req, res) => {
     User.findById(mongoose.Types.ObjectId(req.body.user), (err, user_two) => {
       if (err) return res.status(500).json({ error: "Mongo Error: " + err });
 
-      if (req.body.accept && req.body.accept == "true") {
+      if (req.body.accept) {
         if (user.matched_users.filter(each_user => each_user._id.toString() == req.body.user).length) { 
           const newChatData = {
             user_one: getUserObject(user),

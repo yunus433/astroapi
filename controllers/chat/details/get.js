@@ -21,7 +21,7 @@ module.exports = (req, res) => {
       const messages = [];
       const curr_user = (chat.user_one._id == req.query.id) ? "user_one" : "user_two";
   
-      for (let i = parseInt(req.query.message_start); i < parseInt(req.query.message_start) + parseInt(req.query.message_start); i++) {
+      for (let i = parseInt(req.query.message_start); i < Math.min(parseInt(req.query.message_start) + parseInt(req.query.message_limit), chat.messages.length); i++) {
         const new_message = getMessageObject(chat.messages[i], user.time_zone);
         if (curr_user != new_message.sended_by)
           new_message.read = true;
@@ -29,7 +29,7 @@ module.exports = (req, res) => {
       }
   
       chat.messages = messages;
-      chat.created_at = moment(chat.created_at).tz(user.time_zone).format("DD[.]MM[.]YYYY");
+      // chat.created_at = moment(chat.created_at).tz(user.time_zone).format("DD[.]MM[.]YYYY");
 
       return res.status(200).json({ chat });
     });
