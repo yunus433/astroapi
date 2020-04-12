@@ -14,29 +14,29 @@ module.exports = (req, res) => {
     "old_matches": req.body.user
   }}, (err, user) => {
     if (err) return res.status(500).json({ error: "Mongo Error: " + err });
-    
-    if (req.body.accept) {
-      if (user.matched_users.includes(req.body.user)) {
-        User.findById(mongoose.Types.ObjectId(req.body.user), (err, user_two) => {
-          if (err) return res.status(500).json({ error: "Mongo Error: " + err });
-    
+
+    User.findById(mongoose.Types.ObjectId(req.body.user), (err, user_two) => {
+      if (err) return res.status(500).json({ error: "Mongo Error: " + err });
+
+      if (req.body.accept && req.body.accept == "true") {
+        if (user.matched_users.filter(each_user => each_user._id.toString() == req.body.user).length) { 
           const newChatData = {
             user_one: getUserObject(user),
             user_two: getUserObject(user_two)
           };
-        
+          
           const newChat = new Chat(newChatData);
-  
+    
           newChat.save((err, chat) => {
             if (err) return res.status(500).json({ error: "Mongo Error: " + err });
-  
+    
             Chat.collection.createIndex({ created_at: 1 }, (err, result) => {
               if (err) return res.status(500).json({ error: "Mongo Error: " + err });
             
               User.findByIdAndUpdate(mongoose.Types.ObjectId(req.body.id), {
                 $pull: {
                   "matched_users": {
-                    "_id": req.body.user
+                    "_id": mongoose.Types.ObjectId(req.body.user)
                   }
                 },
                 $push: {
@@ -44,53 +44,53 @@ module.exports = (req, res) => {
                 }
               }, {}, err => {
                 if (err) return res.status(500).json({ error: "Mongo Error: " + err });
-    
+      
                 User.findByIdAndUpdate(mongoose.Types.ObjectId(req.body.user), { $push: {
                     "chat_list": chat._id.toString()
                 }}, {}, err => {
-                  if (err) return res.status(500).json({ error: "Mongo Error: " + err });
-        
-                  sendNotification({
-                    to: req.body.user,
-                    message: "You have a new chat!"
-                  }, (err, response) => {
-                    if (err) return res.status(500).json({ error: "Notification Error: " + err });
-                    
-                    return res.status(200).json({
-                      "new_match": true,
-                      "chat_id": chat._id.toString()
+                    if (err) return res.status(500).json({ error: "Mongo Error: " + err });
+          
+                    sendNotification({
+                      to: req.body.user,
+                      message: "You have a new match!"
+                    }, (err, response) => {
+                      if (err) return res.status(500).json({ error: "Notification Error: " + err });
+                      
+                      return res.status(200).json({
+                        "new_match": true,
+                        "chat_id": chat._id.toString()
+                      });
                     });
-                  });
                 });
               });
             });
           });
-        });
+        } else {
+          User.findByIdAndUpdate(mongoose.Types.ObjectId(req.body.user), { $push: {
+            "matched_users": getUserObject(user)
+          }}, {}, err => {
+            if (err) return res.status(500).json({ error: "Mongo Error: " + err });
+    
+            return res.status(200).json({ "new_match": false });
+          });
+        }
       } else {
-        User.findByIdAndUpdate(mongoose.Types.ObjectId(req.body.user), { $push: {
-          "matched_users": getUserObject(user)
-        }}, {}, err => {
-          if (err) return res.status(500).json({ error: "Mongo Error: " + err });
-  
-          return res.status(200).json({ "new_match": false });
-        });
-      }
-    } else {
-      if (user.matched_users.includes(req.body.user)) {
-        User.findByIdAndUpdate(mongoose.Types.ObjectId(req.body.id), {
-          $pull: {
-            "matched_users": {
-              "_id": req.body.user
+        if (user.matched_users.filter(each_user => each_user._id.toString() == req.body.user).length) {
+          User.findByIdAndUpdate(mongoose.Types.ObjectId(req.body.id), {
+            $pull: {
+              "matched_users": {
+                "_id": mongoose.Types.ObjectId(req.body.user)
+              }
             }
-          }
-        }, {}, err => {
-          if (err) return res.status(500).json({ error: "Mongo Error: " + err });
-          
+          }, {}, err => {
+            if (err) return res.status(500).json({ error: "Mongo Error: " + err });
+            
+            return res.status(200).json({ "new_match": false });
+          });
+        } else {
           return res.status(200).json({ "new_match": false });
-        });
-      } else {
-        return res.status(200).json({ "new_match": false });
+        }
       }
-    }
+    });
   });
 }
