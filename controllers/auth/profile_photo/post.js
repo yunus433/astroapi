@@ -22,6 +22,8 @@ module.exports = (req, res) => {
       User.findByIdAndUpdate(mongoose.Types.ObjectId(req.query.id), {
         $push: {
           "profile_photo_list": location,
+        },
+        $set: {
           "photo_completed": true
         }
       }, {new: true}, (err, user) => {
