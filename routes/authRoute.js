@@ -29,7 +29,7 @@ router.post(
 );
 router.post(
   '/profilephoto',
-  upload.single('file'),
+  upload.single('photo'),
   isAPIAuthenticated,
   profilePhotoPostController
 );
