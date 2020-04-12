@@ -91,7 +91,7 @@ const UserSchema = new Schema({
   },
   profile_photo_list: {
     type: Array,
-    default:["https://astroappapi.s3.amazonaws.com/5b4769dfa842771f59deb32e25ce6ded"] 
+    default:[] 
   },
   best_matches: {
     type: Array,

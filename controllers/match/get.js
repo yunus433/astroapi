@@ -44,6 +44,7 @@ const getUserObjects = (users) => {
 const getUsers = (option, user, limit, callback) => {
   const preferences = {
     completed: true,
+    photo_completed: true,
     _id: {
       $nin: user.old_matches
     },

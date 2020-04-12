@@ -23,9 +23,6 @@ module.exports = (req, res) => {
         $push: {
           "profile_photo_list": location,
           "photo_completed": true
-        },
-        $pull: {
-          "profile_photo_list": "https://astroappapi.s3.amazonaws.com/5b4769dfa842771f59deb32e25ce6ded"
         }
       }, {new: true}, (err, user) => {
         if (err || !user)
