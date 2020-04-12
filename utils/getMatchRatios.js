@@ -788,11 +788,14 @@ module.exports = (params, callback) => {
     all_matches.sort();
     all_matches.reverse();
 
-    for (let i = 0; i < 10; i++)
-      best_matches.push(all_matches[i][3]);
+    for (let i = 0; i < 20; i++){
+      console.log(all_matches[i]);
+      best_matches.push(all_matches[i][3]);}
     
-    for (let i = 10; i < 30; i++)
-      mid_matches.push(all_matches[i][3]);
+    console.log("///");
+    for (let i = 20; i < 150; i++){
+      console.log(all_matches[i]);
+      mid_matches.push(all_matches[i][3]);}
 
     return callback(false, {
       best_matches,
