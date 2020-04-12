@@ -50,8 +50,8 @@ module.exports = async (req, res) => {
   if (!req.body || !req.body.id || !req.body.name || !req.body.birth_time || !req.body.birth_location || !req.body.gender)
     return res.status(400).json({ error: "bad request" });
 
-  req.body.birth_time = JSON.parse(req.body.birth_time);
-  req.body.birth_location = JSON.parse(req.body.birth_location);
+  // req.body.birth_time = JSON.parse(req.body.birth_time);
+  // req.body.birth_location = JSON.parse(req.body.birth_location);
 
   if (getUserAge(req.body.birth_time.month, req.body.birth_time.year) < 18)
     return res.status(400).json({ error: "user should be bigger than 18" })
