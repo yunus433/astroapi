@@ -53,8 +53,8 @@ module.exports = (socket, io) => {
           }}, {new: true}, (err, chat) => {
             if (err) return callback(err);
       
-            socket.to(params.room).emit('new_message', {message: getMessageObject(new_message_data, user_two.time_zone)});
-            return callback(null, {message: getMessageObject(new_message_data, user.time_zone)});
+            socket.to(params.room).emit('new_message', getMessageObject(new_message_data, user_two.time_zone));
+            return callback(null, getMessageObject(new_message_data, user.time_zone));
           });
         });
       });
