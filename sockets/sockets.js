@@ -9,6 +9,7 @@ const uploadPhotoToAWS = require('../utils/uploadPhotoToAWS');
 
 module.exports = (socket, io) => {
   socket.on('join', params => {
+    console.log(params);
     socket.join(params.room.toString());
   });
 
@@ -28,6 +29,7 @@ module.exports = (socket, io) => {
   // }
 
   socket.on('new_message_send', (params, callback) => {
+    console.log(params);
     if (!params || !params.message || !params.room || !params.id || !params.to_id)
       return callback("bad request");
 
