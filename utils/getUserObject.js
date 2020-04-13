@@ -16,6 +16,8 @@ module.exports = (user) => {
     completed: user.completed,
     language_preference: user.language_preference,
     sign: user.sign,
+    mars_sign: user.mars_sign,
+    venus_sign: user.venus_sign,
     sign_id: user.sign_id,
     profile_photo_list: user.profile_photo_list,
     notification_permission: user.notification_permission

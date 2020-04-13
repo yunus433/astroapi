@@ -67,7 +67,8 @@ module.exports = (req, res) => {
           });
         } else {
           User.findByIdAndUpdate(mongoose.Types.ObjectId(req.body.user), { $push: {
-            "matched_users": getUserObject(user)
+            "matched_users": getUserObject(user),
+            "old_matches": user._id.toString()
           }}, {}, err => {
             if (err) return res.status(500).json({ error: "Mongo Error: " + err });
     
