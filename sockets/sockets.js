@@ -47,8 +47,8 @@ module.exports = (socket, io) => {
         User.findById(mongoose.Types.ObjectId(params.to_id), (err, user_two) => {
           if (err) return callback(err);
   
-          if (io.sockets.clients(params.room).length > 1)
-            new_message_data.read = true;
+          // if (io.sockets.clients(params.room).length > 1)
+          //   new_message_data.read = true;
   
           Chat.findByIdAndUpdate(mongoose.Types.ObjectId(params.room), {$push: {
             "messages": new_message_data
