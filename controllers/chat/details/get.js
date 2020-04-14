@@ -21,7 +21,7 @@ module.exports = (req, res) => {
       const messages = [];
       const curr_user = (chat.user_one._id.toString() == req.query.id) ? "user_one" : "user_two";
   
-      for (let i = chat.messages.length - parseInt(req.query.message_start) - parseInt(req.query.message_limit); i < chat.messages.length - parseInt(req.query.message_start); i++) {
+      for (let i = chat.messages.length - parseInt(req.query.message_start) - parseInt(req.query.message_limit) - 1; i < chat.messages.length - parseInt(req.query.message_start) - 1; i++) {
         const new_message = getMessageObject(chat.messages[i], user.time_zone);
         if (curr_user != new_message.sended_by)
           new_message.read = true;
