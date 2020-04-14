@@ -22,13 +22,21 @@ const PORT = process.env.PORT || 3000;
 const mongoUri = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/astroappapi";
 
 // require local route controllers
+const indexRouteController = require('./routes/indexRoute');
 const authRouteController = require('./routes/authRoute');
 const userRouteController = require('./routes/userRoute');
 const matchRouteController = require('./routes/matchRoute');
 const chatRouteController = require('./routes/chatRoute');
 
+// add pug as views to server
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "pug");
+
 // connect mongoose to server
 mongoose.connect(mongoUri, { useNewUrlParser: true, auto_reconnect: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false });
+
+// add public folder to server
+app.use(express.static(path.join(__dirname, "public")));
 
 // set body parser
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -41,6 +49,7 @@ app.use((req, res, next) => {
 });
 
 // add route controllers
+app.use('/', indexRouteController);
 app.use('/auth', authRouteController);
 app.use('/user', userRouteController);
 app.use('/match', matchRouteController);

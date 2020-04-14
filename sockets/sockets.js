@@ -16,17 +16,6 @@ module.exports = (socket, io) => {
     socket.leave(params.room.toString());
   });
 
-  // const params = {
-  //   message: {
-  //     content_or_filename: "",
-  //     type: "",
-  //     sended_by: ""
-  //   },
-  //   room: "chat_id",
-  //   id: "user_id",
-  //   to_id: "to_user_id"
-  // }
-
   socket.on('new_message_send', (params, callback) => {
     if (!params || !params.message || !params.room || !params.id || !params.to_id)
       return callback("bad request");
@@ -45,8 +34,8 @@ module.exports = (socket, io) => {
         User.findById(mongoose.Types.ObjectId(params.to_id), (err, user_two) => {
           if (err) return callback(err);
   
-          // if (io.sockets.clients(params.room).length > 1)
-          //   new_message_data.read = true;
+          if (io.sockets.clients().adapter.rooms[params.room].length > 1)
+            new_message_data.read = true;
   
           Chat.findByIdAndUpdate(mongoose.Types.ObjectId(params.room), {$push: {
             "messages": new_message_data

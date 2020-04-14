@@ -1,0 +1,20 @@
+doctype html
+html(lang="tr")
+  head
+    meta(name="viewport", content="width=device-width, initial-scale=1.0, shrink-to-fit=no")
+    title Astro App | #{title}
+    if includes && includes.external
+      if includes.external.indexOf('fontawesome') > -1
+        link(rel="stylesheet",
+            href="https://use.fontawesome.com/releases/v5.2.0/css/all.css",
+            integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ",
+            crossorigin="anonymous")
+      if includes.external.indexOf('js') > -1 
+        script(src=`/js/${page}.js`)
+      if includes.external.indexOf('socket.io') > -1 
+        script(src=`/socket.io/socket.io.js`)
+      if includes.external.indexOf('css') > -1 
+        link(rel="stylesheet", href=`/css/${page}.css`)
+    link(href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:100,200,300,400,500,600,700,800,900" rel="stylesheet")
+  body
+    block content
