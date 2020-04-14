@@ -13,7 +13,7 @@ module.exports = (req, res) => {
     if (err || !user)
       return res.status(500).json({ error: "Mongo Error: " + err });
 
-    if (user.profile_photo_list.size > 5)
+    if (user.profile_photo_list.length > 5)
       return res.status(400).json({ error: "user already have 6 photos" });
 
     uploadPhotoToAWS(req.file.filename, (err, location) => {
