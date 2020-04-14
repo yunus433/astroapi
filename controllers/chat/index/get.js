@@ -5,7 +5,7 @@ const Chat = require('../../../models/chat/Chat');
 
 const getMessageObject = require('../../../utils/getMessageObject');
 
-const getCharObjects = (chat_list, tz) => {
+const getChatObjects = (chat_list, tz) => {
   const new_list = [];
 
   chat_list.forEach(chat => {
@@ -13,7 +13,7 @@ const getCharObjects = (chat_list, tz) => {
       _id: chat._id,
       user_one: chat.user_one,
       user_two: chat.user_two,
-      last_message: getMessageObject(chat.messages[chat.messages.lenght-1], tz)
+      last_message: chat.messages.length ? getMessageObject(chat.messages[chat.messages.length-1], tz) : null
     });
   });
 
@@ -35,7 +35,7 @@ module.exports = (req, res) => {
     })
     .sort({created_at: 1})
     .then(chat_list => {
-      return res.status(200).json({ chat_list: getCharObjects(chat_list, user.time_zone) });
+      return res.status(200).json({ chat_list: getChatObjects(chat_list, user.time_zone) });
     })
     .catch(err => {
       return res.status(500).json({ error: "Mongo Error: " + err });
