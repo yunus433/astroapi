@@ -32,6 +32,8 @@ module.exports = (req, res) => {
         messages.push(new_message);
       }
 
+      messages.reverse();
+
       return res.status(200).json({ chat: {
         messages,
         created_at: moment(chat.created_at).tz(user.time_zone).format("DD[.]MM[.]YYYY"),
