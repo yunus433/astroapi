@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const jimp = require('jimp');
 
 const User = require('../../../models/user/User');
 
@@ -9,12 +10,17 @@ module.exports = (req, res) => {
   if (!req.file || !req.query || !req.query.id)
     return res.status(400).json({ error: "bad request" });
 
-  User.findById(mongoose.Types.ObjectId(req.query.id), (err, user) => {
+  User.findById(mongoose.Types.ObjectId(req.query.id), async (err, user) => {
     if (err || !user)
       return res.status(500).json({ error: "Mongo Error: " + err });
 
     if (user.profile_photo_list.length > 5)
       return res.status(400).json({ error: "user already have 6 photos" });
+
+    const image_path = "./public/res/uploads/" + req.file.filename;
+    const image = await jimp.read(image_path);
+    await image.quality(50);
+    await image.writeAsync(image_path);
 
     uploadPhotoToAWS(req.file.filename, (err, location) => {
       if (err) return res.status(500).json({ error: "AWS Error: " + err });
