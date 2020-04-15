@@ -25,7 +25,8 @@ module.exports = (req, res) => {
       const message_limit = req.query.message_limit;
       const n = chat.messages.length - 1;
 
-      for (let i = Math.max(0, (n-message_start)); i > Math.max(0, (n-message_start-message_limit)); i--) {
+      for (let i = Math.max(0, (n-message_start)); i > n-message_start-message_limit; i--) {
+        if (i < 0) break;
         const new_message = getMessageObject(chat.messages[i], user.time_zone);
         if (curr_user != new_message.sended_by)
           new_message.read = true;
