@@ -69,6 +69,10 @@ const UserSchema = new Schema({
     type: Boolean,
     default: false
   },
+  premium_exp_date: {
+    type: Number,
+    default: null
+  },
   sign: {
     type: String,
     default: ""

@@ -18,6 +18,10 @@ const ChatSchema = new Schema({
   created_at: {
     type: Date,
     default: (new Date()).getTime()
+  },
+  access_permission: {
+    type: Boolean,
+    default: true
   }
 });
 

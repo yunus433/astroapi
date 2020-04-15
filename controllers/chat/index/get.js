@@ -14,7 +14,8 @@ const getChatObjects = (chat_list, tz, user_id) => {
       user_one: chat.user_one,
       user_two: chat.user_two,
       last_message: chat.messages.length ? getMessageObject(chat.messages[chat.messages.length-1], tz) : null,
-      total_message_number: chat.messages.filter(message => {return (message.sended_by != user_id && !message.read)}).length
+      total_message_number: chat.messages.filter(message => {return (message.sended_by != user_id && !message.read)}).length,
+      access_permission: chat.access_permission
     });
   });
 

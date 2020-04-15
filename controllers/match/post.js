@@ -22,7 +22,8 @@ module.exports = (req, res) => {
         if (user.matched_users.filter(each_user => each_user._id.toString() == req.body.user).length) { 
           const newChatData = {
             user_one: getUserObject(user),
-            user_two: getUserObject(user_two)
+            user_two: getUserObject(user_two),
+            access_permission: (user.is_premium || user.chat_list.length < (user.gender == "male" ? 5 : 10)) ? true : false
           };
           
           const newChat = new Chat(newChatData);
