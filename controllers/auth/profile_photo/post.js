@@ -17,10 +17,13 @@ module.exports = (req, res) => {
     if (user.profile_photo_list.length > 5)
       return res.status(400).json({ error: "user already have 6 photos" });
 
-    const image_path = "./public/res/uploads/" + req.file.filename;
-    const image = await jimp.read(image_path);
-    await image.quality(50);
-    await image.writeAsync(image_path);
+    if (req.file.size > 200000) {
+      const image_path = "./public/res/uploads/" + req.file.filename;
+      const image = await jimp.read(image_path);
+      const image_quality = 200000 * 100 / req.file.size;
+      await image.quality(image_quality);
+      await image.writeAsync(image_path);
+    }
 
     uploadPhotoToAWS(req.file.filename, (err, location) => {
       if (err) return res.status(500).json({ error: "AWS Error: " + err });
