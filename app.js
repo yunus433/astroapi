@@ -5,6 +5,7 @@ const path = require('path');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const expressSession = require('express-session');
 const socketIO = require('socket.io');
 
 const sockets = require('./sockets/sockets');
@@ -22,7 +23,7 @@ const PORT = process.env.PORT || 3000;
 const mongoUri = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/astroappapi";
 
 // require local route controllers
-const indexRouteController = require('./routes/indexRoute');
+const adminRouteController = require('./routes/adminRoute');
 const authRouteController = require('./routes/authRoute');
 const userRouteController = require('./routes/userRoute');
 const matchRouteController = require('./routes/matchRoute');
@@ -38,6 +39,17 @@ mongoose.connect(mongoUri, { useNewUrlParser: true, auto_reconnect: true, useUni
 // add public folder to server
 app.use(express.static(path.join(__dirname, "public")));
 
+// set express session
+const session = expressSession({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }
+});
+
+// use express session
+app.use(session);
+
 // set body parser
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -49,7 +61,7 @@ app.use((req, res, next) => {
 });
 
 // add route controllers
-app.use('/', indexRouteController);
+app.use('/admin', adminRouteController);
 app.use('/auth', authRouteController);
 app.use('/user', userRouteController);
 app.use('/match', matchRouteController);

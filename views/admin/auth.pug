@@ -1,0 +1,7 @@
+extends ./../partials/head
+block content
+  .main-wrapper
+    form.form-wrapper(action="/admin/auth" method="POST")
+      span Admin Girişi
+      input(type="password" name="password" autofocus required placeholder="Admin şifresini girin")
+      button Giriş

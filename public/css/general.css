@@ -1,0 +1,30 @@
+* {
+  -webkit-font-smoothing: antialiased;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;  
+  font-family: "Source Sans Pro";
+}
+html {
+  width: 100%;
+  margin: 0px;
+  padding: 0px;
+  overflow: hidden;
+  -webkit-overflow-scrolling: touch;
+  height: 100%;
+	background: rgb(248, 248, 248);
+	background-size: cover;
+}
+body {
+  font-family: "Source Sans Pro";
+  width: 100vw;
+  margin: 0px;
+  padding: 0px;
+  height: 100vh;
+  bottom: 0px;
+  min-height: 100%;
+  overflow: hidden;
+}
+.display-none {
+  display: none;
+}
