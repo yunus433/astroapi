@@ -20,6 +20,8 @@ module.exports = (user) => {
     venus_sign: user.venus_sign,
     sign_id: user.sign_id,
     profile_photo_list: user.profile_photo_list,
-    notification_permission: user.notification_permission
+    notification_permission: user.notification_permission,
+    is_premium: user.is_premium,
+    last_premium_day: user.premium_exp_date ? Math.floor((user.premium_exp_date - (new Date()).getTime()) / 1000 / 60 / 60 / 24) : null
   }
 }
