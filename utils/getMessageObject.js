@@ -8,7 +8,7 @@ module.exports = (message, time_zone) => {
       sended_by: message.sended_by,
       message_date: moment(message.created_at).tz(time_zone).format("DD[.]MM[.]YYYY"),
       message_time: moment(message.created_at).tz(time_zone).format("HH[:]mm"),
-      read: message.read
+      read: message.read ? true : false
     }
   } else {
     return {
@@ -17,7 +17,7 @@ module.exports = (message, time_zone) => {
       sended_by: message.sended_by,
       message_date: moment(message.created_at).tz(time_zone).format("DD[.]MM[.]YYYY"),
       message_time: moment(message.created_at).tz(time_zone).format("HH[:]mm"),
-      read: message.read
+      read: message.read ? true : false
     }
   }
 }
