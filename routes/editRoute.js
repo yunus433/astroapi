@@ -4,12 +4,12 @@ const router = express.Router();
 
 const isAPIAuthenticated = require('../middleware/isAPIAuthenticated');
 
-const notificationPostController = require('../controllers/notification/post');
+const editPostController = require('../controllers/edit/post');
 
 router.post(
   '/',
   isAPIAuthenticated,
-  notificationPostController
+  editPostController
 );
 
 module.exports = router;
