@@ -6,6 +6,7 @@ const Chat = require('../models/chat/Chat');
 
 const getMessageObject = require('../utils/getMessageObject');
 const uploadPhotoToAWS = require('../utils/uploadPhotoToAWS');
+const sendNotification = require('../utils/sendNotification');
 
 module.exports = (socket, io) => {
   socket.on('join', params => {
@@ -41,9 +42,24 @@ module.exports = (socket, io) => {
             "messages": new_message_data
           }}, {new: true}, (err, chat) => {
             if (err) return callback(err);
-      
-            socket.to(params.room).emit('new_message', getMessageObject(new_message_data, user_two.time_zone));
-            return callback(null, getMessageObject(new_message_data, user.time_zone));
+
+            if (!new_message_data.read) {
+              sendNotification({
+                to: to_id,
+                message: {
+                  title: user.name,
+                  content: new_message_data.content
+                }
+              }, (err, response) => {
+                if (err) return res.status(500).json({ error: "Notification Error: " + err });
+                
+                socket.to(params.room).emit('new_message', getMessageObject(new_message_data, user_two.time_zone));
+                return callback(null, getMessageObject(new_message_data, user.time_zone));
+              });
+            } else {
+              socket.to(params.room).emit('new_message', getMessageObject(new_message_data, user_two.time_zone));
+              return callback(null, getMessageObject(new_message_data, user.time_zone));
+            }  
           });
         });
       });

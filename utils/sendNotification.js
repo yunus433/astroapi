@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const OneSignal = require('onesignal-node'); 
+const FCM = require('fcm-node');
 
 const User = require('../models/user/User');
 
@@ -16,6 +16,22 @@ module.exports = (data, callback) => {
         reason: "Notifications not permitted or token not found."
       });
 
-    return callback(null, { success: true });
+    const fcm = new FCM(process.env.FCM_SERVER_KEY);
+
+    const message = { 
+      to: user.notification_token, 
+      collapse_key: process.env.FCM_COLLAPSE_KEY,
+      
+      notification: {
+        title: data.message.title, 
+        body: data.message.content 
+      }
+    };
+
+    fcm.send(message, (err, response) => {
+      if (err) return callback(err);
+
+      return callback(null, { success: true });
+    });
   });
 }

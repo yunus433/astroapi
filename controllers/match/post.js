@@ -53,7 +53,10 @@ module.exports = (req, res) => {
           
                     sendNotification({
                       to: req.body.user,
-                      message: "You have a new match!"
+                      message: {
+                        title: "You have a new match!",
+                        content: "Click to start to chat now."
+                      }
                     }, (err, response) => {
                       if (err) return res.status(500).json({ error: "Notification Error: " + err });
                       

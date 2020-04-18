@@ -24,6 +24,7 @@ const userRouteController = require('./routes/userRoute');
 const matchRouteController = require('./routes/matchRoute');
 const chatRouteController = require('./routes/chatRoute');
 const premiumRouteController = require('./routes/premiumRoute');
+const notificationRouteController = require('./routes/notificationRoute');
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
@@ -61,6 +62,7 @@ app.use('/user', userRouteController);
 app.use('/match', matchRouteController);
 app.use('/chat', chatRouteController);
 app.use('/premium', premiumRouteController);
+app.use('/notification', notificationRouteController);
 
 io.on('connection', (socket) => {
   sockets(socket, io);
