@@ -31,7 +31,7 @@ const getUserObjects = (users) => {
         venus_sign: user.venus_sign
       }
     }, (err, matching_ratio) => {
-      if (err) console.log(err);
+      if (err) return res.status(500).json({ error: err });
       new_user.matching_ratio = matching_ratio;
 
       arr.push(new_user);
