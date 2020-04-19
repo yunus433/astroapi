@@ -34,11 +34,12 @@ module.exports = (req, res) => {
         const message_limit = req.query.message_limit;
         const n = chat.messages.length - 1;
   
-        for (let i = Math.max(0, (n-message_start)); i > n-message_start-message_limit; i--) {
-          if (i < 0) break;
-          const new_message = getMessageObject(chat.messages[i], user.time_zone);
-          messages.push(new_message);
-        }
+        if (n > -1)
+          for (let i = Math.max(0, (n-message_start)); i > n-message_start-message_limit; i--) {
+            if (i < 0) break;
+            const new_message = getMessageObject(chat.messages[i], user.time_zone);
+            messages.push(new_message);
+          }
   
         messages.reverse();
   
