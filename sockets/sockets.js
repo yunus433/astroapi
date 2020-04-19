@@ -45,7 +45,7 @@ module.exports = (socket, io) => {
 
             if (!new_message_data.read) {
               sendNotification({
-                to: to_id,
+                to: params.to_id,
                 message: {
                   title: user.name,
                   content: new_message_data.content
