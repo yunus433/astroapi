@@ -40,7 +40,7 @@ module.exports = (req, res) => {
     });
   } else {
     User.findById(mongoose.Types.ObjectId(req.query.id), (err, user) => {
-      if (err || !req_user) return res.status(500).json({ error: "Mongo Error: " + err });
+      if (err || !user) return res.status(500).json({ error: "Mongo Error: " + err });
 
       return res.status(200).json({ user: getUserObject(user) });
     });
