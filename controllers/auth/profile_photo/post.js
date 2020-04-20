@@ -20,7 +20,7 @@ module.exports = (req, res) => {
     if (req.file.size > 200000) {
       const image_path = "./public/res/uploads/" + req.file.filename;
       const image = await jimp.read(image_path);
-      const image_quality = 200000 * 100 / req.file.size;
+      let image_quality = 200000 * 100 / req.file.size;
       if (image_quality < 10)
         image_quality = 10;
       await image.quality(image_quality);
