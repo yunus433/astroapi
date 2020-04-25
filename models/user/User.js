@@ -21,6 +21,10 @@ const UserSchema = new Schema({
   //   type: String,
   //   required: true
   // },
+  firebase_id: {
+    type: String,
+    required: true
+  },
   name: {
     type: String,
     default: ""
