@@ -35,6 +35,7 @@
     "pug": "^2.0.4",
     "socket.io": "^2.2.0",
     "textbelt": "0.0.4",
+    "twilio": "^3.42.2",
     "validator": "^13.0.0"
   }
 }

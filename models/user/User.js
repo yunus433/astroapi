@@ -17,10 +17,10 @@ const UserSchema = new Schema({
     type: Number,
     required: true
   },
-  phone_auth_code: {
-    type: String,
-    required: true
-  },
+  // phone_auth_code: {
+  //   type: String,
+  //   required: true
+  // },
   name: {
     type: String,
     default: ""

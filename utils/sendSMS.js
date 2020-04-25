@@ -19,3 +19,25 @@ module.exports = (params, callback) => {
     callback(err, result);
   });
 };
+
+// const twillo = require('twilio');
+
+// const client = twillo(process.env.TWILIO_ACCOUNT_ID, process.env.TWILIO_AUTH_TOKEN);
+
+// module.exports = (params, callback) => {
+//   if (!params || !params.message || !params.to)
+//     return callback('missing params');
+
+//   client.messages
+//     .create({
+//       body: params.message,
+//       from: "Astro App",
+//       to: params.to
+//     })
+//     .then(response => {
+//       if (response.error_code)
+//         return callback(response.error_message);
+
+//       return callback(null, response);
+//     });
+// }

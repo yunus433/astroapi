@@ -31,11 +31,10 @@ module.exports = (req, res) => {
         if (err || !user) return res.status(500).json({ error: "mongo error: " + err });
 
         sendSMS({
-          phone: user.phone,
-          subject: "AstroApp",
-          message: `Your Astro app verification code is ${newUserData.phone_auth_code}`
+          to: user.phone,
+          message: `Your Astro App verification code is ${newUserData.phone_auth_code}`
         }, (err, result) => {
-          if (err) return res.status(500).json({ error: "aws sns error" });
+          if (err) return res.status(500).json({ error: `SMS error: ${err}` });
 
           return res.status(200).json({ user_id: user._id });
         });
@@ -44,11 +43,10 @@ module.exports = (req, res) => {
       if (err || !user) return res.status(500).json({ error: "mongo error: " + err });
 
       sendSMS({
-        phone: user.phone,
-        subject: "AstroApp",
-        message: `Your Astro app verification code is ${newUserData.phone_auth_code}`
+        to: user.phone,
+        message: `Your Astro App verification code is ${newUserData.phone_auth_code}`
       }, (err, result) => {
-        if (err) return res.status(500).json({ error: "aws sns error" });
+        if (err) return res.status(500).json({ error: `SMS error: ${err}` });
   
         return res.status(200).json({ user_id: user._id });
       });
