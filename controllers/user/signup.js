@@ -11,21 +11,23 @@ module.exports = (req, res) => {
   }, (err, user) => {
     if (err) return res.status(500).json({ error: "Mongo Error: " + err });
 
-    if (user) return res.status(200).json({ user });
-
-    const newUserData = {
-      firebase_id: req.body.id,
-      phone: req.body.phone,
-      last_active: (new Date()).getTime(),
-      created_at: (new Date()).getTime()
-    };
-  
-    const newUser = new User(newUserData);
-
-    newUser.save((err, user) => {
-      if (err || !user) return res.status(500).json({ error: "mongo error: " + err });
-
+    if (user && user.length) {
       return res.status(200).json({ user });
-    });
+    } else {
+      const newUserData = {
+        firebase_id: req.body.id,
+        phone: req.body.phone,
+        last_active: (new Date()).getTime(),
+        created_at: (new Date()).getTime()
+      };
+    
+      const newUser = new User(newUserData);
+  
+      newUser.save((err, user) => {
+        if (err || !user) return res.status(500).json({ error: "mongo error: " + err });
+  
+        return res.status(200).json({ user });
+      });
+    }
   });
 }
