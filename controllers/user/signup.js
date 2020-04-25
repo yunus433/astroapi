@@ -8,6 +8,8 @@ module.exports = (req, res) => {
   if (!req.body || !req.body.id || !req.body.phone)
     return res.status(400).json({ error: "bad request" });
 
+  console.log(req.body);
+
   User.findById(mongoose.Types.ObjectId(req.body.id), (err, user) => {
     if (err) return res.status(500).json({ error: "Mongo Error: " + err });
 
