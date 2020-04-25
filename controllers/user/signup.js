@@ -2,8 +2,6 @@ const mongoose = require('mongoose');
 
 const User = require('../../models/user/User');
 
-const getUserObject = require('../../utils/getUserObject');
-
 module.exports = (req, res) => {
   if (!req.body || !req.body.id || !req.body.phone)
     return res.status(400).json({ error: "bad request" });
@@ -13,7 +11,7 @@ module.exports = (req, res) => {
   }, (err, user) => {
     if (err) return res.status(500).json({ error: "Mongo Error: " + err });
 
-    if (user) return res.status(200).json({ user: getUserObject(user) });
+    if (user) return res.status(200).json({ user });
 
     const newUserData = {
       firebase_id: req.body.id,
@@ -27,7 +25,7 @@ module.exports = (req, res) => {
     newUser.save((err, user) => {
       if (err || !user) return res.status(500).json({ error: "mongo error: " + err });
 
-      return res.status(200).json({ user: getUserObject(user) });
+      return res.status(200).json({ user });
     });
   });
 }
