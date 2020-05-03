@@ -12,7 +12,7 @@ module.exports = (req, res) => {
     if (err) return res.status(500).json({ error: "Mongo Error: " + err });
 
     if (user && user.length) {
-      return res.status(200).json({ user });
+      return res.status(200).json({ "user": user[0]  });
     } else {
       const newUserData = {
         firebase_id: req.body.id,
@@ -26,7 +26,7 @@ module.exports = (req, res) => {
       newUser.save((err, user) => {
         if (err || !user) return res.status(500).json({ error: "mongo error: " + err });
   
-        return res.status(200).json({ user });
+        return res.status(200).json({ "user": user });
       });
     }
   });
