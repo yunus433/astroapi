@@ -6,13 +6,13 @@ module.exports = (req, res) => {
   if (!req.body || !req.body.id || !req.body.phone)
     return res.status(400).json({ error: "bad request" });
 
-  User.find({
+  User.findOne({
     firebase_id: req.body.id
   }, (err, user) => {
     if (err) return res.status(500).json({ error: "Mongo Error: " + err });
 
-    if (user && user.length) {
-      return res.status(200).json({ "user": user[0]  });
+    if (user) {
+      return res.status(200).json({ "user": user });
     } else {
       const newUserData = {
         firebase_id: req.body.id,
