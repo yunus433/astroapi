@@ -24,9 +24,19 @@ module.exports = (req, res) => {
       const newUser = new User(newUserData);
   
       newUser.save((err, user) => {
-        if (err || !user) return res.status(500).json({ error: "mongo error: " + err });
+        if (err && err.code == 11000) {
+          User.findOne({
+            firebase_id: req.body.id
+          }, (err, user) => {
+            if (err) return res.status(500).json({ error: "Mongo Error: " + err });
+
+            return res.status(200).json({ "user": user });
+          });
+        } else {
+          if (err || !user) return res.status(500).json({ error: "mongo error: " + err });
   
-        return res.status(200).json({ "user": user });
+          return res.status(200).json({ "user": user });
+        }
       });
     }
   });
