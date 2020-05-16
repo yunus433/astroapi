@@ -1,10 +1,9 @@
 const mongoose = require('mongoose');
-const jimp = require('jimp');
+const fs = require('fs');
 
 const User = require('../../../models/user/User');
 
 const getUserObject = require('../../../utils/getUserObject');
-const uploadPhotoToAWS = require('../../../utils/uploadPhotoToAWS');
 
 module.exports = (req, res) => {
   if (!req.file || !req.query || !req.query.id)
@@ -17,32 +16,32 @@ module.exports = (req, res) => {
     if (user.profile_photo_list.length > 5)
       return res.status(400).json({ error: "user already have 6 photos" });
 
-    if (req.file.size > 200000) {
-      const image_path = "./public/res/uploads/" + req.file.filename;
-      const image = await jimp.read(image_path);
-      let image_quality = 200000 * 100 / req.file.size;
-      if (image_quality < 10)
-        image_quality = 10;
-      await image.quality(image_quality);
-      await image.writeAsync(image_path);
-    }
-
-    uploadPhotoToAWS(req.file.filename, (err, location) => {
-      if (err) return res.status(500).json({ error: "AWS Error: " + err });
+    req.cloudinary.v2.uploader.upload(
+      "./public/res/uploads/" + req.file.filename,
+      {
+        public_id: "astro/profile_photo/" + req.file.filename,
+        quality: 25,
+        format: "JPG",
+        secure: true
+      },
+      (err, result) => {
+        if (err) res.status(400).json({ error: err });
+  
+        fs.unlink("./public/res/uploads/" + req.file.filename, err => {
+          User.findByIdAndUpdate(mongoose.Types.ObjectId(req.query.id), {
+            $push: {
+              "profile_photo_list": result.secure_url,
+            },
+            $set: {
+              "photo_completed": true
+            }
+          }, {new: true}, (err, user) => {
+            if (err || !user)
+              return res.status(500).json({ error: "Mongo Error: " + err });
     
-      User.findByIdAndUpdate(mongoose.Types.ObjectId(req.query.id), {
-        $push: {
-          "profile_photo_list": location,
-        },
-        $set: {
-          "photo_completed": true
-        }
-      }, {new: true}, (err, user) => {
-        if (err || !user)
-          return res.status(500).json({ error: "Mongo Error: " + err });
-
-        return res.status(200).json({user: getUserObject(user)});
+            return res.status(200).json({user: getUserObject(user)});
+          });
+        });
       });
-    });
   });
 }

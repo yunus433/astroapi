@@ -1,11 +1,5 @@
 const fs = require('fs');
 const mongoose = require('mongoose');
-const AWS = require('aws-sdk');
-
-const s3 = new AWS.S3({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
-});
 
 const User = require('../../../../models/user/User');
 
@@ -24,23 +18,24 @@ module.exports = (req, res) => {
 
     if (user.profile_photo_list.length == 1)
       return res.status(400).json({ error: "user has only one photo" });
+    
+    req.cloudinary.v2.uploader.destroy(
+      "astro/profile_photo/" +
+        req.body.image
+          .split("/")
+          [req.body.image.split("/").length - 1].split(".")[0],
+      err => {
+        if (err) return res.status(400).json({ error: err });
 
-    const params = {
-      Bucket: process.env.AWS_BUCKET_NAME,
-      Key: req.body.image.split('com/')[1]
-    };
-    
-    s3.deleteObject(params, (err, data) => {
-      if (err) return res.status(500).json({ error: "AWS Error: " + err });
-    
-      User.findByIdAndUpdate(mongoose.Types.ObjectId(req.body.id), {$pull: {
-        "profile_photo_list": req.body.image
-      }}, {new: true}, (err, user) => {
-        if (err || !user)
-          return res.status(500).json({ error: "Mongo Error: " + err });
-        
-        return res.status(200).json({user: getUserObject(user)});
-      });
-    });
+        User.findByIdAndUpdate(mongoose.Types.ObjectId(req.body.id), {$pull: {
+          "profile_photo_list": req.body.image
+        }}, {new: true}, (err, user) => {
+          if (err || !user)
+            return res.status(500).json({ error: "Mongo Error: " + err });
+          
+          return res.status(200).json({user: getUserObject(user)});
+        });
+      }
+    );
   });
 }
