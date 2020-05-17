@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const fs = require('fs');
+const jimp = require('jimp');
 
 const User = require('../../../models/user/User');
 
@@ -16,11 +17,19 @@ module.exports = (req, res) => {
     if (user.profile_photo_list.length > 5)
       return res.status(400).json({ error: "user already have 6 photos" });
 
+    const image_path = "./public/res/uploads/" + req.file.filename;
+
+    const image = await jimp.read(image_path);
+    const image_quality = 200000 * 100 / req.file.size;
+    if (image_quality < 10)
+      image_quality = 10;
+    await image.quality(image_quality);
+    await image.writeAsync(image_path);
+
     req.cloudinary.v2.uploader.upload(
       "./public/res/uploads/" + req.file.filename,
       {
         public_id: "astro/profile_photo/" + req.file.filename,
-        quality: 25,
         format: "JPG",
         secure: true
       },
