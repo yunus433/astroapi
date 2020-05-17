@@ -20,7 +20,7 @@ module.exports = (req, res) => {
     const image_path = "./public/res/uploads/" + req.file.filename;
 
     const image = await jimp.read(image_path);
-    const image_quality = 200000 * 100 / req.file.size;
+    let image_quality = 200000 * 100 / req.file.size;
     if (image_quality < 10)
       image_quality = 10;
     await image.quality(image_quality);
@@ -34,7 +34,7 @@ module.exports = (req, res) => {
         secure: true
       },
       (err, result) => {
-        if (err) res.status(400).json({ error: err });
+        if (err) return res.status(400).json({ error: err });
   
         fs.unlink("./public/res/uploads/" + req.file.filename, err => {
           User.findByIdAndUpdate(mongoose.Types.ObjectId(req.query.id), {
