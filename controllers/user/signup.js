@@ -28,9 +28,20 @@ module.exports = (req, res) => {
           User.findOne({
             firebase_id: req.body.id
           }, (err, user) => {
-            if (err || !user) return res.status(500).json({ error: "mongo Error: " + err });
+            if (err) return res.status(500).json({ error: "mongo Error: " + err });
 
-            return res.status(200).json({ "user": user });
+            if (user)
+              return res.status(200).json({ "user": user });
+            
+            User.findOneAndUpdate({
+              phone: req.body.phone
+            }, {
+              firebase_id: req.body.firebase_id
+            }, {new: true}, (err, user) => {
+              if (err) return res.status(500).json({ error: "mongo Error: " + err });
+
+              return res.status(200).json({ "user": user });
+            });
           });
         } else {
           if (err || !user) return res.status(500).json({ error: "mongo error: " + err });
