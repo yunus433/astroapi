@@ -8,6 +8,7 @@ const userGetController = require('../controllers/user/get');
 
 const userPostController = require('../controllers/user/post');
 const signupPostController = require('../controllers/user/signup');
+const notificationPostController = require('../controllers/user/notification');
 
 router.get(
   '/',
@@ -24,6 +25,11 @@ router.post(
   '/signup',
   isAPIAuthenticated,
   signupPostController
+);
+router.post(
+  '/notification',
+  isAPIAuthenticated,
+  notificationPostController
 );
 
 module.exports = router;

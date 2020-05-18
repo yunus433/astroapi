@@ -1,4 +1,7 @@
 const getUserAge = (month, year) => {
+  if (!month || !year)
+    return 0;
+
   const curr_year = new Date().getFullYear();
   const curr_month = new Date().getMonth() + 1;
 

@@ -17,10 +17,6 @@ const UserSchema = new Schema({
     type: Number,
     required: true
   },
-  // phone_auth_code: {
-  //   type: String,
-  //   required: true
-  // },
   firebase_id: {
     type: String,
     required: true
@@ -51,11 +47,18 @@ const UserSchema = new Schema({
   },
   age_interval: {
     type: Object,
-    default: {}
+    default: {
+      min: null,
+      max: null
+    }
   },
   birth_time: {
     type: Object,
-    default: {}
+    default: {
+      day: null,
+      month: null,
+      year: null
+    }
   },
   birth_location: {
     type: Object,
