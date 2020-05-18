@@ -23,6 +23,8 @@ module.exports = (req, res) => {
     let image_quality = 200000 * 100 / req.file.size;
     if (image_quality < 10)
       image_quality = 10;
+
+    console.log(image_quality);
     await image.quality(image_quality);
     await image.writeAsync(image_path);
 
