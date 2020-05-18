@@ -9,7 +9,7 @@ module.exports = (req, res) => {
   User.findOne({
     firebase_id: req.body.id
   }, (err, user) => {
-    if (err) return res.status(500).json({ error: "Mongo Error: " + err });
+    if (err) return res.status(500).json({ error: "mongo Error: " + err });
 
     if (user) {
       return res.status(200).json({ "user": user });
@@ -28,7 +28,7 @@ module.exports = (req, res) => {
           User.findOne({
             firebase_id: req.body.id
           }, (err, user) => {
-            if (err) return res.status(500).json({ error: "Mongo Error: " + err });
+            if (err || !user) return res.status(500).json({ error: "mongo Error: " + err });
 
             return res.status(200).json({ "user": user });
           });
