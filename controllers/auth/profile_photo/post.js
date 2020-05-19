@@ -23,8 +23,7 @@ module.exports = (req, res) => {
         public_id: "astro/profile_photo/" + req.file.filename,
         format: "JPG",
         secure: true,
-        quality: "auto:eco",
-        width: "auto"
+        quality: "auto:low"
       },
       (err, result) => {
         if (err) return res.status(400).json({ error: err });

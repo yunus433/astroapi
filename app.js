@@ -16,7 +16,7 @@ const io = socketIO(server);
 
 dotenv.config({ path: path.join(__dirname, ".env") });
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 3000;
 const mongoUri = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/astroappapi";
 
 const adminRouteController = require('./routes/adminRoute');
