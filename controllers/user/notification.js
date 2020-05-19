@@ -5,7 +5,7 @@ const User = require('../../models/user/User');
 const getUserObject = require('../../utils/getUserObject');
 
 module.exports = (req, res) => {
-  if (!req.body || !req.body.id || !req.body.token || !req.body.permission)
+  if (!req.body || !req.body.id || !req.body.token)
     return res.status(400).json({ error: 'bad request' });
 
   User.findByIdAndUpdate(

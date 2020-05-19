@@ -94,10 +94,10 @@ const getUsers = (option, user, limit, callback) => {
 
 module.exports = (req, res) => {
   if (!req.query || !req.query.id || !req.query.limit)
-    return res.status(400).json({ error: "Bad request" });
+    return res.status(400).json({ error: "bad request" });
 
   User.findById(mongoose.Types.ObjectId(req.query.id), (err, user) => {
-    if (err) return res.status(500).json({ error: "Mongo Error: " + err });
+    if (err) return res.status(500).json({ error: "mongo Error: " + err });
     main_user = user;
     let limit = req.query.limit;
     limit -= user.matched_users.length;
@@ -125,13 +125,13 @@ module.exports = (req, res) => {
         });
       } else {
         getUsers("mid", user, limit, (err, mid_users) => {
-          if (err) return res.status(500).json({ error: "Mongo Error: " + err });
+          if (err) return res.status(500).json({ error: "mongo Error: " + err });
   
           if (mid_users.length == limit)
             return res.status(200).json({ matches: getUserObjects(mid_users).concat(getUserObjects(user.matched_users)) });
   
           getUsers("all", user, (limit - mid_users.length), (err, all_users) => {
-            if (err) return res.status(500).json({ error: "Mongo Error: " + err });
+            if (err) return res.status(500).json({ error: "mongo Error: " + err });
   
             return res.status(200).json({ matches: getUserObjects(mid_users).concat(getUserObjects(user.matched_users)).concat(getUserObjects(all_users)) });
           });
