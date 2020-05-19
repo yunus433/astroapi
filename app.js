@@ -25,7 +25,6 @@ const userRouteController = require('./routes/userRoute');
 const matchRouteController = require('./routes/matchRoute');
 const chatRouteController = require('./routes/chatRoute');
 const premiumRouteController = require('./routes/premiumRoute');
-const notificationRouteController = require('./routes/notificationRoute');
 const editRouteController = require('./routes/editRoute');
 
 const {
@@ -78,7 +77,6 @@ app.use('/user', userRouteController);
 app.use('/match', matchRouteController);
 app.use('/chat', chatRouteController);
 app.use('/premium', premiumRouteController);
-app.use('/notification', notificationRouteController);
 app.use('/edit', editRouteController);
 
 io.on('connection', (socket) => {

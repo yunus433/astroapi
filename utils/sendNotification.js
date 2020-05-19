@@ -21,7 +21,6 @@ module.exports = (data, callback) => {
     const message = { 
       to: user.notification_token, 
       collapse_key: process.env.FCM_COLLAPSE_KEY,
-      
       notification: {
         title: data.message.title, 
         body: data.message.content 
