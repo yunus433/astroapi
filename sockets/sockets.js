@@ -33,6 +33,7 @@ module.exports = (socket, io) => {
         if (err) return callback(err);
   
         if (io.sockets.clients().adapter.rooms[params.room].length > 1) {
+          console.log(io.sockets.clients().adapter.rooms[params.room]);
           new_message_data.read = true;
           console.log("message read");
         }
