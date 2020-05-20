@@ -20,6 +20,7 @@ const PORT = process.env.PORT || 3000;
 const mongoUri = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/astroappapi";
 
 const adminRouteController = require('./routes/adminRoute');
+const agreementRouteController = require('./routes/agreementRoute');
 const authRouteController = require('./routes/authRoute');
 const userRouteController = require('./routes/userRoute');
 const matchRouteController = require('./routes/matchRoute');
@@ -72,6 +73,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/admin', adminRouteController);
+app.use('/agreement', agreementRouteController);
 app.use('/auth', authRouteController);
 app.use('/user', userRouteController);
 app.use('/match', matchRouteController);

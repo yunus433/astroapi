@@ -23,7 +23,6 @@ body {
   height: 100vh;
   bottom: 0px;
   min-height: 100%;
-  overflow: hidden;
 }
 .display-none {
   display: none;
