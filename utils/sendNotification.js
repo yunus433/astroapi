@@ -10,7 +10,7 @@ module.exports = (data, callback) => {
   User.findById(mongoose.Types.ObjectId(data.to), (err, user) => {
     if (err) return callback(err);
 
-    if (!user.notication_permission || !user.notification_token)
+    if (!user.notification_permission || !user.notification_token)
       return callback(null, {
         success: false,
         reason: "Notifications not permitted or token not found."

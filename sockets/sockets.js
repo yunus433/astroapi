@@ -32,34 +32,26 @@ module.exports = (socket, io) => {
       User.findById(mongoose.Types.ObjectId(params.to_id), (err, user_two) => {
         if (err) return callback(err);
   
-        if (io.sockets.clients().adapter.rooms[params.room].length > 1) {
-          console.log(io.sockets.clients().adapter.rooms[params.room]);
-          new_message_data.read = true;
-          console.log("message read");
-        }
+        // if (io.sockets.clients().adapter.rooms[params.room].length > 1)
+          // new_message_data.read = true;
   
         Chat.findByIdAndUpdate(mongoose.Types.ObjectId(params.room), {$push: {
           "messages": new_message_data
         }}, {new: true}, (err, chat) => {
           if (err) return callback(err);
 
-          if (!new_message_data.read) {
-            sendNotification({
-              to: params.to_id,
-              message: {
-                title: user.name,
-                content: new_message_data.content
-              }
-            }, (err, response) => {
-              if (err) console.log(err, response);
-              
-              socket.to(params.room).emit('new_message', getMessageObject(new_message_data, user_two.time_zone));
-              return callback(null, getMessageObject(new_message_data, user.time_zone));
-            });
-          } else {
+          sendNotification({
+            to: params.to_id,
+            message: {
+              title: user.name,
+              content: new_message_data.content
+            }
+          }, (err, response) => {
+            if (err) console.log(err, response);
+            
             socket.to(params.room).emit('new_message', getMessageObject(new_message_data, user_two.time_zone));
             return callback(null, getMessageObject(new_message_data, user.time_zone));
-          }
+          });
         });
       });
     });
