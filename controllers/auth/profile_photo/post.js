@@ -20,7 +20,7 @@ module.exports = (req, res) => {
     const image_path = "./public/res/uploads/" + req.file.filename;
 
     const image = await jimp.read(image_path);
-    const image_quality = Math.max(250000 * 100 / req.file.size, 10);
+    const image_quality = Math.max(Math.min(200000 * 100 / req.file.size, 100), 10);
 
     await image.quality(image_quality);
     await image.writeAsync(image_path);

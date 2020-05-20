@@ -19,51 +19,49 @@ module.exports = (socket, io) => {
     if (!params || !params.message || !params.room || !params.id || !params.to_id)
       return callback("bad request");
 
-    // if (params.message.type == "text") {
-      const new_message_data = {
-        type: "text",
-        content: params.message.content,
-        sended_by: params.message.sendedBy,
-        created_at: Date.now(),
-        read: false
-      }
+    const new_message_data = {
+      type: "text",
+      content: params.message.content,
+      sended_by: params.message.sendedBy,
+      created_at: Date.now(),
+      read: false
+    }
 
-      User.findById(mongoose.Types.ObjectId(params.id), (err, user) => {
+    User.findById(mongoose.Types.ObjectId(params.id), (err, user) => {
+      if (err) return callback(err);
+      User.findById(mongoose.Types.ObjectId(params.to_id), (err, user_two) => {
         if (err) return callback(err);
-        User.findById(mongoose.Types.ObjectId(params.to_id), (err, user_two) => {
+  
+        if (io.sockets.clients().adapter.rooms[params.room].length > 1) {
+          new_message_data.read = true;
+          console.log("message read");
+        }
+  
+        Chat.findByIdAndUpdate(mongoose.Types.ObjectId(params.room), {$push: {
+          "messages": new_message_data
+        }}, {new: true}, (err, chat) => {
           if (err) return callback(err);
-  
-          if (io.sockets.clients().adapter.rooms[params.room].length > 1)
-            new_message_data.read = true;
-  
-          Chat.findByIdAndUpdate(mongoose.Types.ObjectId(params.room), {$push: {
-            "messages": new_message_data
-          }}, {new: true}, (err, chat) => {
-            if (err) return callback(err);
 
-            if (!new_message_data.read) {
-              sendNotification({
-                to: params.to_id,
-                message: {
-                  title: user.name,
-                  content: new_message_data.content
-                }
-              }, (err, response) => {
-                if (err) console.log(err);
-                
-                socket.to(params.room).emit('new_message', getMessageObject(new_message_data, user_two.time_zone));
-                return callback(null, getMessageObject(new_message_data, user.time_zone));
-              });
-            } else {
+          if (!new_message_data.read) {
+            sendNotification({
+              to: params.to_id,
+              message: {
+                title: user.name,
+                content: new_message_data.content
+              }
+            }, (err, response) => {
+              if (err) console.log(err, response);
+              
               socket.to(params.room).emit('new_message', getMessageObject(new_message_data, user_two.time_zone));
               return callback(null, getMessageObject(new_message_data, user.time_zone));
-            }  
-          });
+            });
+          } else {
+            socket.to(params.room).emit('new_message', getMessageObject(new_message_data, user_two.time_zone));
+            return callback(null, getMessageObject(new_message_data, user.time_zone));
+          }
         });
       });
-    // } else {
-
-    // };
+    });
   });
 
 
