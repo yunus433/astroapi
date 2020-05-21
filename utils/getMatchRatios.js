@@ -748,6 +748,7 @@ const combinations = {
 }
 
 module.exports = (params, callback) => {
+  console.log(params);
   if (params.option == "get matches") {
     const ascendant = params.ascendant, mars_sign = params.mars_sign, venus_sign = params.venus_sign;
 
