@@ -751,7 +751,7 @@ module.exports = (params, callback) => {
   if (params.option == "get matches") {
     const ascendant = params.ascendant, mars_sign = params.mars_sign, venus_sign = params.venus_sign;
 
-    if (!names.includes(ascendant) || !names.includes(mars_sign))
+    if (!names.includes(ascendant) || !names.includes(mars_sign) || !names.includes(venus_sign))
       return callback("Unknown values for ascendant and mars sign");
 
     const all_matches = [], best_matches = [], mid_matches = [];
