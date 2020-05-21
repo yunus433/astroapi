@@ -39,7 +39,7 @@ const getUserObjects = (users) => {
   });
 
   return arr;
-}
+};
 
 const getUsers = (option, user, limit, callback) => {
   const preferences = {
@@ -98,6 +98,8 @@ module.exports = (req, res) => {
 
   User.findById(mongoose.Types.ObjectId(req.query.id), (err, user) => {
     if (err) return res.status(500).json({ error: "mongo Error: " + err });
+    if (err || !user.completed) return res.status(400).json({ error: "user not completed" });
+
     main_user = user;
     let limit = req.query.limit;
     limit -= user.matched_users.length;
