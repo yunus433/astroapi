@@ -8,6 +8,9 @@ const getUserAge = (month, year) => {
   return (curr_year - year - 1) + parseInt((12 - month + curr_month) / 12);
 };
 
+const names = [ "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces" ];
+const names_tr = [ "Koç", "Boğa", "İkizler", "Yengeç", "Aslan", "Başak", "Terazi", "Akrep", "Yay", "Oğlak", "Kova", "Balık"];
+
 module.exports = (user) => {
   return {
     _id: user._id,
@@ -18,9 +21,9 @@ module.exports = (user) => {
     wanted_gender: user.wanted_gender,
     completed: user.completed,
     language_preference: user.language_preference,
-    sign: user.sign,
-    mars_sign: user.mars_sign,
-    venus_sign: user.venus_sign,
+    sign: (user.language_preference == "tr" ? names_tr[names.indexOf(user.sign)] : user.sign),
+    mars_sign: (user.language_preference == "tr" ? names_tr[names.indexOf(user.mars_sign)] : user.mars_sign),
+    venus_sign: (user.language_preference == "tr" ? names_tr[names.indexOf(user.venus_sign)] : user.venus_sign),
     sign_id: user.sign_id,
     profile_photo_list: user.profile_photo_list,
     notification_permission: user.notification_permission,
