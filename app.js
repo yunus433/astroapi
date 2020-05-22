@@ -27,6 +27,7 @@ const matchRouteController = require('./routes/matchRoute');
 const chatRouteController = require('./routes/chatRoute');
 const premiumRouteController = require('./routes/premiumRoute');
 const editRouteController = require('./routes/editRoute');
+const blockRouteController = require('./routes/blockRoute');
 
 const {
   SESSION_SECRET,
@@ -80,6 +81,7 @@ app.use('/match', matchRouteController);
 app.use('/chat', chatRouteController);
 app.use('/premium', premiumRouteController);
 app.use('/edit', editRouteController);
+app.use('/block', blockRouteController);
 
 io.on('connection', (socket) => {
   sockets(socket, io);
