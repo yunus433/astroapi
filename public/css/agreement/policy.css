@@ -1,0 +1,37 @@
+body {
+  overflow: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+.main-wrapper {
+  display: flex;
+  flex-direction: column;
+  padding: 25px;
+  padding-bottom: 200px;
+  height: fit-content;
+}
+
+.main-title {
+  font-size: 150%;
+  font-weight: 600;
+  color: rgb(64, 64, 64);
+  margin-bottom: 25px;
+}
+.title {
+  font-size: 125%;
+  font-weight: 600;
+  color: rgb(64, 64, 64);
+  margin-bottom: 25px;
+}
+.sub-title {
+  font-size: 100%;
+  font-weight: 600;
+  color: rgb(64, 64, 64);
+  margin-bottom: 15px;
+}
+.content {
+  font-size: 100%;
+  font-weight: 300;
+  color: rgb(64, 64, 64);
+  margin-bottom: 15px;
+}
