@@ -32,7 +32,7 @@
     "moment-timezone": "^0.5.28",
     "mongoose": "^5.5.4",
     "multer": "^1.4.2",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.7",
     "pug": "^2.0.4",
     "socket.io": "^2.2.0",
     "textbelt": "0.0.4",
