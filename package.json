@@ -22,7 +22,7 @@
     "body-parser": "^1.19.0",
     "cloudinary": "^1.21.0",
     "dotenv": "^7.0.0",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "express-session": "^1.17.0",
     "fcm-node": "^1.5.2",
     "geo-tz": "^5.1.0",
